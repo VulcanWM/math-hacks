@@ -15,7 +15,6 @@ const MathathonSchema = new mongoose.Schema({
         }
     ],
     coverImage: { type: String } // URL to image
-
-    }, { timestamps: true })
+}, { timestamps: true })
 
 export default mongoose.models.Mathathon || mongoose.model('Mathathon', MathathonSchema);
