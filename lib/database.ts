@@ -141,3 +141,12 @@ export async function get_all_winning_submissions_of_user(user_id: string) {
 
     return submissions;
 }
+
+export async function submit_mathathon_submission(mathathon_id: string, participant_id: string){
+    // only once per user per mathathon
+    const mathathon = await get_mathathon_from_id(mathathon_id);
+    if (mathathon == false) return "Mathathon not found";
+    const participant = await get_user_from_id(participant_id);
+    if (participant == false) return "You have not signed in";
+
+}

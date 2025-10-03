@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 const SubmissionSchema = new mongoose.Schema({
     mathathon: { type: mongoose.Schema.Types.ObjectId, ref: 'Mathathon', required: true },
     participant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    title: {type: String, required: true},
-    shortDescription: {type: String, required: true},
+    title: {type: String, required: true, maxlength: 100},
+    shortDescription: {type: String, required: true, maxLength: 200},
     // longDescription: {type: String, required: true}, can use github readme description
     thumbnail: { type: String, required: true },
     repoLink: { type: String, required: true },

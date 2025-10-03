@@ -1,34 +1,39 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type React from "react"
+import type { Metadata } from "next"
+import { Space_Mono, Outfit } from "next/font/google"
+import { Suspense } from "react"
+import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const spaceMono = Space_Mono({
+    subsets: ["latin"],
+    weight: ["400", "700"],
+    variable: "--font-mono",
+    display: "swap",
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const outfit = Outfit({
+    subsets: ["latin"],
+    variable: "--font-sans",
+    display: "swap",
+})
 
 export const metadata: Metadata = {
-  title: "Math Hacks",
-  description: "Weekend challenges where math meets hackathons",
-};
+    title: "MathHacks - Mathathon Platform for Teen Math Enthusiasts",
+    description:
+        "Join exciting math challenges and competitions. Showcase your problem-solving skills and connect with fellow math enthusiasts.",
+}
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" className={`dark ${spaceMono.variable} ${outfit.variable}`}>
+        <body className="font-sans antialiased">
+        <Suspense fallback={null}>{children}</Suspense>
+        </body>
+        </html>
+    )
 }
+
