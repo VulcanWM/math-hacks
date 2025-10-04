@@ -1,0 +1,6 @@
+- button is not hovering properly, also no outline
+- view button is not working on user page (yellow button not working on any pages)
+- no padding left on user page
+- no padding left on mathathon page
+- no padding left on browse-mathathon page
+- no padding left on submission page
