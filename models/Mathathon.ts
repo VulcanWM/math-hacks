@@ -5,8 +5,6 @@ const MathathonSchema = new mongoose.Schema({
     startDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
     title: {type: String, required: true},
-    description: {type: String, required: true},
-    tags: [String],
     winners: [
         {
             submission: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' },
@@ -14,7 +12,21 @@ const MathathonSchema = new mongoose.Schema({
             prize: String
         }
     ],
-    coverImage: { type: String } // URL to image
+    mathathonType: {type: String, required: true},
+    coverImage: { type: String }, // URL to image
+    topic: {type: String, required: true},
+    sponsors: [
+        {
+            name: String,
+            url: String,
+        }
+    ],
+    prizes: [
+        {
+            prizeName: String, // 1st place
+            prize: String // badge + money
+        }
+    ]
 }, { timestamps: true })
 
 export default mongoose.models.Mathathon || mongoose.model('Mathathon', MathathonSchema);
