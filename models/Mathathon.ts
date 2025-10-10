@@ -4,6 +4,8 @@ const MathathonSchema = new mongoose.Schema({
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     startDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
+    declareWinnerDate: {type: Date, required: true},
+    deltaValue: {type: Number, required: true},
     title: {type: String, required: true},
     winners: [
         {
