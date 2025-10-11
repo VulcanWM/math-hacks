@@ -9,30 +9,22 @@ import { ArrowRight, Trophy, Users, Zap, Calendar, TrendingUp, Code } from "luci
 export default function HomePage() {
   return (
       <div className="flex min-h-screen flex-col">
-        <SiteHeader/>
-        {/*<div className="bg-secondary border-secondary text-secondary">*/}
-        {/*  <p>hi pls work</p>*/}
-        {/*</div>*/}
-        {/*<div className="bg-accent border-accent text-accent">*/}
-        {/*  <p>hi pls work</p>*/}
-        {/*</div>*/}
-
+        <SiteHeader />
 
         <main className="flex-1">
           <section className="relative overflow-hidden py-24 md:py-40 noise-texture">
             <div className="container mx-auto max-w-7xl px-6 lg:px-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-8">
-                  <div
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border-2 border-primary/30 font-mono text-sm font-bold text-primary">
-                    <TrendingUp className="w-4 h-4"/>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border-2 border-primary/30 font-mono text-sm font-bold text-primary">
+                    <TrendingUp className="w-4 h-4" />
                     10K+ BUILDERS ONLINE
                   </div>
                   <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
                     Build Math
-                    <br/>
+                    <br />
                     <span className="text-primary">Projects</span>
-                    <br/>
+                    <br />
                     Win Big
                   </h1>
                   <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
@@ -46,15 +38,10 @@ export default function HomePage() {
                         className="text-lg h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                     >
                       <Link href="/mathathons">
-                        Start Building <ArrowRight className="ml-2 h-5 w-5"/>
+                        Start Building <ArrowRight className="ml-2 h-5 w-5" />
                       </Link>
                     </Button>
-                    <Button
-                        size="lg"
-                        variant="outline"
-                        asChild
-                        className="text-lg h-14 px-8 border-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-bold bg-transparent"
-                    >
+                    <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
                       <Link href="/submit">Submit Project</Link>
                     </Button>
                   </div>
@@ -62,13 +49,12 @@ export default function HomePage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    {label: "Active Mathathons", value: "47", color: "primary"},
-                    {label: "Total Projects", value: "12.4K", color: "secondary"},
-                    {label: "Avg. Build Time", value: "8hrs", color: "accent"},
-                    {label: "Prize Pool", value: "$5K", color: "primary"},
+                    { label: "Active Mathathons", value: "47", color: "primary" },
+                    { label: "Total Projects", value: "12.4K", color: "secondary" },
+                    { label: "Avg. Build Time", value: "8hrs", color: "accent" },
+                    { label: "Prize Pool", value: "$5K", color: "primary" },
                   ].map((stat, i) => (
-                      <Card key={i}
-                            className="border-2 border-border hover:border-primary/50 transition-colors accent-bar">
+                      <Card key={i} className="border-2 border-border hover:border-primary/50 transition-colors accent-bar">
                         <CardHeader className="pb-2">
                           <CardDescription className="text-xs font-mono uppercase tracking-wider">
                             {stat.label}
@@ -81,8 +67,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/5 rotate-45 blur-3xl"/>
-            <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-secondary/5 rotate-12 blur-3xl"/>
+            <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/5 rotate-45 blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-secondary/5 rotate-12 blur-3xl" />
           </section>
 
           <section className="py-20 md:py-32 bg-muted/30">
@@ -94,7 +80,7 @@ export default function HomePage() {
                 </div>
                 <Button variant="ghost" asChild className="text-primary font-bold">
                   <Link href="/mathathons">
-                    View All <ArrowRight className="ml-2 h-4 w-4"/>
+                    View All <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </div>
@@ -136,12 +122,11 @@ export default function HomePage() {
                             {mathathon.difficulty}
                           </Badge>
                           <div className="flex items-center gap-1 font-mono text-sm font-bold text-primary">
-                            <Calendar className="w-4 h-4"/>
+                            <Calendar className="w-4 h-4" />
                             {mathathon.daysLeft}d
                           </div>
                         </div>
-                        <CardTitle
-                            className="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
+                        <CardTitle className="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
                           {mathathon.title}
                         </CardTitle>
                         <CardDescription className="leading-relaxed">{mathathon.description}</CardDescription>
@@ -149,7 +134,7 @@ export default function HomePage() {
                       <CardContent>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-sm text-muted-foreground font-mono">
-                            <Users className="w-4 h-4"/>
+                            <Users className="w-4 h-4" />
                             <span className="font-bold">{mathathon.participants}</span>
                           </div>
                           <Button
@@ -202,7 +187,7 @@ export default function HomePage() {
                         <div
                             className={`inline-flex w-16 h-16 bg-${feature.color}/10 border-2 border-${feature.color}/30 items-center justify-center`}
                         >
-                          <feature.icon className={`w-8 h-8 text-${feature.color}`}/>
+                          <feature.icon className={`w-8 h-8 text-${feature.color}`} />
                         </div>
                       </div>
                       <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
@@ -231,12 +216,7 @@ export default function HomePage() {
                     >
                       <Link href="/mathathons">Browse Mathathons</Link>
                     </Button>
-                    <Button
-                        size="lg"
-                        variant="outline"
-                        asChild
-                        className="text-lg h-14 px-8 border-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-bold bg-transparent"
-                    >
+                    <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
                       <Link href="/create-mathathon">Create Your Own</Link>
                     </Button>
                   </div>
@@ -246,7 +226,7 @@ export default function HomePage() {
           </section>
         </main>
 
-        <SiteFooter/>
+        <SiteFooter />
       </div>
   )
 }
