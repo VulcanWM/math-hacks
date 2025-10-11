@@ -162,40 +162,43 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: Code,
-                    title: "Build Real Projects",
-                    description: "Create websites, tools, and visualizations about math topics you love.",
-                    color: "primary",
-                  },
-                  {
-                    icon: Trophy,
-                    title: "Real Competition",
-                    description: "Compete against the best builders. Climb leaderboards. Earn respect.",
-                    color: "secondary",
-                  },
-                  {
-                    icon: Zap,
-                    title: "Ship Fast",
-                    description: "Build. Submit. Get feedback. Learn from other projects.",
-                    color: "accent",
-                  },
-                ].map((feature, i) => (
-                    <div key={i} className="group">
-                      <div className="mb-6">
-                        <div
-                            className={`inline-flex w-16 h-16 bg-${feature.color}/10 border-2 border-${feature.color}/30 items-center justify-center`}
-                        >
-                          <feature.icon className={`w-8 h-8 text-${feature.color}`} />
-                        </div>
-                      </div>
-                      <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                        {feature.title}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                <div className="group">
+                  <div className="mb-6">
+                    <div className="inline-flex w-16 h-16 bg-primary/10 border-2 border-primary/30 items-center justify-center">
+                      <Code className="w-8 h-8 text-primary" />
                     </div>
-                ))}
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                    Build Real Projects
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Create websites, tools, and visualizations about math topics you love.
+                  </p>
+                </div>
+
+                <div className="group">
+                  <div className="mb-6">
+                    <div className="inline-flex w-16 h-16 bg-secondary/10 border-2 border-secondary/30 items-center justify-center">
+                      <Trophy className="w-8 h-8 text-secondary" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Real Competition</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Compete against the best builders. Climb leaderboards. Earn respect.
+                  </p>
+                </div>
+
+                <div className="group">
+                  <div className="mb-6">
+                    <div className="inline-flex w-16 h-16 bg-accent/10 border-2 border-accent/30 items-center justify-center">
+                      <Zap className="w-8 h-8 text-accent" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Ship Fast</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Build. Submit. Get feedback. Learn from other projects.
+                  </p>
+                </div>
               </div>
             </div>
           </section>

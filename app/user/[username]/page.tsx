@@ -14,6 +14,8 @@ export default async function UserProfilePage({ params }: { params: { username: 
         name: "Alex Chen",
         joinDate: "January 2024",
         bio: "Passionate about mathematics and problem-solving. Love tackling challenging algebra and number theory problems. Currently studying Computer Science with a focus on algorithms.",
+        delta: 1250,
+        xp: 3420,
         stats: {
             mathathonsJoined: 12,
             submissions: 18,
@@ -113,6 +115,14 @@ export default async function UserProfilePage({ params }: { params: { username: 
 
                                 {/* Stats */}
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+                                    <div className="text-center p-3 bg-secondary/10 border-2 border-secondary/30 rounded-lg">
+                                        <div className="text-2xl font-bold text-secondary font-mono">{user.delta.toLocaleString()}</div>
+                                        <div className="text-xs text-muted-foreground font-mono">Delta (Δ)</div>
+                                    </div>
+                                    <div className="text-center p-3 bg-accent/10 border-2 border-accent/30 rounded-lg">
+                                        <div className="text-2xl font-bold text-accent font-mono">{user.xp.toLocaleString()}</div>
+                                        <div className="text-xs text-muted-foreground font-mono">XP</div>
+                                    </div>
                                     <div className="text-center p-3 bg-background rounded-lg border">
                                         <div className="text-2xl font-bold text-primary">{user.stats.mathathonsJoined}</div>
                                         <div className="text-xs text-muted-foreground">Mathathons</div>
