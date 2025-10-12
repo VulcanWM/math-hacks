@@ -104,7 +104,7 @@ export default function HomePage() {
               <div className="flex items-end justify-between mb-12">
                 <div>
                   <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">Live Mathathons</h2>
-                  <p className="text-lg text-muted-foreground font-mono">// Pick your challenge</p>
+                  <p className="text-lg text-muted-foreground font-mono">&#x2f;&#x2f; Pick your challenge</p>
                 </div>
                 <Button variant="ghost" asChild className="text-primary font-bold">
                   {/*<Link href="/mathathons">*/}
@@ -175,7 +175,7 @@ export default function HomePage() {
               <div className="text-center mb-16">
                 <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Why MathHacks?</h2>
                 <p className="text-lg text-muted-foreground font-mono max-w-2xl mx-auto">
-                  // Built different for math nerds who code
+                  &#x2f;&#x2f; Built different for math nerds who code
                 </p>
               </div>
 
@@ -227,7 +227,7 @@ export default function HomePage() {
                 <CardHeader className="text-center space-y-6 py-16">
                   <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Ready to Build?</h2>
                   <p className="text-xl text-muted-foreground font-mono max-w-2xl mx-auto">
-                    // Stop reading. Start building.
+                    &#x2f;&#x2f; Stop reading. Start building.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
                     <Button
