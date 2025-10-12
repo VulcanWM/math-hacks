@@ -1,4 +1,4 @@
-import Link from "next/link"
+// import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,7 +18,7 @@ export default function HomePage() {
                 <div className="space-y-8">
                   <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border-2 border-primary/30 font-mono text-sm font-bold text-primary">
                     <TrendingUp className="w-4 h-4" />
-                    10K+ BUILDERS ONLINE
+                    2+ BUILDERS ONLINE
                   </div>
                   <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
                     Build Math
@@ -37,29 +37,57 @@ export default function HomePage() {
                         asChild
                         className="text-lg h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                     >
-                      <Link href="/mathathons">
+                      {/*<Link href="/mathathons">*/}
+                      {/*  Start Building <ArrowRight className="ml-2 h-5 w-5" />*/}
+                      {/*</Link>*/}
+                      <a target="_blank" href="https://tally.so/r/w45MeA">
                         Start Building <ArrowRight className="ml-2 h-5 w-5" />
-                      </Link>
+                      </a>
                     </Button>
                     <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
-                      <Link href="/submit">Submit Project</Link>
+                      {/*<Link href="/submit">Submit Project</Link>*/}
+                      <a target="_blank" href="https://tally.so/r/w45MeA">
+                        Submit Project
+                      </a>
                     </Button>
                   </div>
                 </div>
 
+                {/*<div className="grid grid-cols-2 gap-4">*/}
+                {/*  {[*/}
+                {/*    { label: "Active Mathathons", value: "47", color: "primary" },*/}
+                {/*    { label: "Total Projects", value: "12.4K", color: "secondary" },*/}
+                {/*    { label: "Avg. Build Time", value: "8hrs", color: "accent" },*/}
+                {/*    { label: "Prize Pool", value: "$5K", color: "primary" },*/}
+                {/*  ].map((stat, i) => (*/}
+                {/*      <Card key={i} className="border-2 border-border hover:border-primary/50 transition-colors accent-bar">*/}
+                {/*        <CardHeader className="pb-2">*/}
+                {/*          <CardDescription className="text-xs font-mono uppercase tracking-wider">*/}
+                {/*            {stat.label}*/}
+                {/*          </CardDescription>*/}
+                {/*          <CardTitle className="text-4xl font-bold font-mono">{stat.value}</CardTitle>*/}
+                {/*        </CardHeader>*/}
+                {/*      </Card>*/}
+                {/*  ))}*/}
+                {/*</div>*/}
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Active Mathathons", value: "47", color: "primary" },
-                    { label: "Total Projects", value: "12.4K", color: "secondary" },
-                    { label: "Avg. Build Time", value: "8hrs", color: "accent" },
-                    { label: "Prize Pool", value: "$5K", color: "primary" },
+                    { label: "Active Mathathons", value: "0", sub: "Launching Soon" },
+                    { label: "Total Projects", value: "0", sub: "First One Coming" },
+                    { label: "Avg. Build Time", value: "-", sub: "TBD" },
+                    { label: "Prize Pool", value: "$0", sub: "Opens at Launch" },
                   ].map((stat, i) => (
                       <Card key={i} className="border-2 border-border hover:border-primary/50 transition-colors accent-bar">
                         <CardHeader className="pb-2">
                           <CardDescription className="text-xs font-mono uppercase tracking-wider">
                             {stat.label}
                           </CardDescription>
-                          <CardTitle className="text-4xl font-bold font-mono">{stat.value}</CardTitle>
+                          <CardTitle className="text-4xl font-bold font-mono opacity-70">{stat.value}</CardTitle>
+                          {stat.sub && (
+                              <p className="text-[10px] text-muted-foreground uppercase tracking-wide font-mono mt-1">
+                                {stat.sub}
+                              </p>
+                          )}
                         </CardHeader>
                       </Card>
                   ))}
@@ -79,38 +107,25 @@ export default function HomePage() {
                   <p className="text-lg text-muted-foreground font-mono">// Pick your challenge</p>
                 </div>
                 <Button variant="ghost" asChild className="text-primary font-bold">
-                  <Link href="/mathathons">
+                  {/*<Link href="/mathathons">*/}
+                  {/*  View All <ArrowRight className="ml-2 h-4 w-4" />*/}
+                  {/*</Link>*/}
+                  <a target="_blank" href="https://tally.so/r/w45MeA">
                     View All <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                   {
-                    title: "Spring Algebra Sprint",
-                    description: "Build an interactive algebra learning tool or visualization.",
-                    participants: 234,
-                    daysLeft: 5,
-                    difficulty: "MID",
-                    color: "primary",
-                  },
-                  {
-                    title: "Geometry Masters",
-                    description: "Create a geometric proof visualizer or construction tool.",
-                    participants: 189,
-                    daysLeft: 12,
-                    difficulty: "HARD",
-                    color: "secondary",
-                  },
-                  {
-                    title: "Number Theory Quest",
-                    description: "Build a project exploring primes, divisibility, or modular arithmetic.",
-                    participants: 312,
-                    daysLeft: 3,
+                    title: "Mathathon #1",
+                    description: "Build a project about a secret theme, will be revealed on the day",
+                    participants: 4,
+                    daysLeft: 10,
                     difficulty: "EASY",
-                    color: "accent",
-                  },
+                    color: "primary",
+                  }
                 ].map((mathathon, i) => (
                     <Card
                         key={i}
@@ -142,7 +157,10 @@ export default function HomePage() {
                               asChild
                               className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                           >
-                            <Link href={`/mathathon/${i + 1}`}>Join →</Link>
+                            {/*<Link href={`/mathathon/${i + 1}`}>Join →</Link>*/}
+                            <a target="_blank" href="https://tally.so/r/w45MeA">
+                              Join →
+                            </a>
                           </Button>
                         </div>
                       </CardContent>
@@ -217,10 +235,16 @@ export default function HomePage() {
                         asChild
                         className="text-lg h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                     >
-                      <Link href="/mathathons">Browse Mathathons</Link>
+                      {/*<Link href="/mathathons">Browse Mathathons</Link>*/}
+                      <a target="_blank" href="https://tally.so/r/w45MeA">
+                        Browse Mathathons
+                      </a>
                     </Button>
                     <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
-                      <Link href="/create-mathathon">Create Your Own</Link>
+                      {/*<Link href="/create-mathathon">Create Your Own</Link>*/}
+                      <a target="_blank" href="https://tally.so/r/w45MeA">
+                        Create Your Own
+                      </a>
                     </Button>
                   </div>
                 </CardHeader>
