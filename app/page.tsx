@@ -12,7 +12,7 @@ export default function HomePage() {
         <SiteHeader />
 
         <main className="flex-1">
-          <section className="relative overflow-hidden py-24 md:py-40 noise-texture">
+          <section className="relative overflow-hidden py-12 md:py-20 noise-texture">
             <div className="container mx-auto max-w-7xl px-6 lg:px-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-8">

@@ -11,7 +11,6 @@ export default function UserProfilePage(props: {username: string, userDoc: {
     username: string, name: string, bio: string, delta: number, xp: number
 }}) {
     const {userDoc} = props
-    console.log(userDoc)
     const user = {
         username: userDoc.username,
         name: userDoc.name,
@@ -90,7 +89,7 @@ export default function UserProfilePage(props: {username: string, userDoc: {
             <main className="flex-1">
                 {/* Profile Header */}
                 <section className="py-12 md:py-16 border-b bg-gradient-to-br from-primary/5 via-background to-secondary/5 math-grid-pattern">
-                    <div className="container max-w-5xl">
+                    <div className="container mx-auto max-w-7xl px-6 lg:px-12">
                         <div className="flex flex-col md:flex-row gap-8 items-start">
                             {/* Avatar */}
                             <div className="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white font-bold text-5xl shadow-lg">
@@ -138,7 +137,7 @@ export default function UserProfilePage(props: {username: string, userDoc: {
                     </div>
                 </section>
 
-                <div className="container max-w-5xl py-12">
+                <div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Main Content */}
                         <div className="lg:col-span-2">
