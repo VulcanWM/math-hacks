@@ -9,27 +9,26 @@ export async function create_user(
     links: { [key: string]: string }
 ) {
     await dbConnect();
-
     try {
-        const user = await User.create({
+        await User.create({
             email,
             username,
             bio,
             name,
             links: links || {},
         });
-        return user;
+        return true;
     } catch (err: any) {
         if (err.name === "ValidationError") {
             // handles maxlength, required fields, etc.
-            throw new Error(Object.values(err.errors).map(e => e.message).join(", "));
+            return Object.values(err.errors).map(e => e.message).join(", ")
         }
         if (err.code === 11000) {
             // duplicate key error
-            if (err.keyPattern?.email) throw new Error("Email already in use");
-            if (err.keyPattern?.username) throw new Error("Username already in use");
+            if (err.keyPattern?.email) return "Email already in use"
+            if (err.keyPattern?.username) return"Username already in use"
         }
-        throw err; // rethrow anything unexpected
+        return err; // rethrow anything unexpected
     }
 }
 

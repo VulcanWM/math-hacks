@@ -14,7 +14,7 @@ export default async function CreateMathathon() {
   const user = await get_user_from_email(email)
 
   if (user == false){
-    redirect('/create-account')
+    redirect('/setup-account')
   }
 
   if (user.role != 'admin'){

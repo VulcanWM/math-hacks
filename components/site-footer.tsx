@@ -22,28 +22,19 @@ export function SiteFooter() {
                         <h3 className="font-semibold mb-3">Platform</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li>
-                                {/*<Link href="/mathathons" className="hover:text-foreground transition-colors">*/}
-                                {/*    Browse Mathathons*/}
-                                {/*</Link>*/}
-                                <a target="_blank" href="https://tally.so/r/w45MeA" className="hover:text-foreground transition-colors">
+                                <Link href="/mathathons" className="hover:text-foreground transition-colors">
                                     Browse Mathathons
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                {/*<Link href="/submit" className="hover:text-foreground transition-colors">*/}
-                                {/*    Submit Solution*/}
-                                {/*</Link>*/}
-                                <a target="_blank" href="https://tally.so/r/w45MeA" className="hover:text-foreground transition-colors">
+                                <Link href="/submit" className="hover:text-foreground transition-colors">
                                     Submit Solution
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                {/*<Link href="/create-mathathon" className="hover:text-foreground transition-colors">*/}
-                                {/*    Create Event*/}
-                                {/*</Link>*/}
-                                <a target="_blank" href="https://tally.so/r/w45MeA" className="hover:text-foreground transition-colors">
+                                <Link href="/create-mathathon" className="hover:text-foreground transition-colors">
                                     Create Event
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
