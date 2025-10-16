@@ -7,15 +7,18 @@ import { SiteFooter } from "@/components/site-footer"
 import { Trophy, Calendar, Target, Award } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default function UserProfilePage(props: {username: string}) {
-    const {username} = props
+export default function UserProfilePage(props: {username: string, userDoc: {
+    username: string, name: string, bio: string, delta: number, xp: number
+}}) {
+    const {userDoc} = props
+    console.log(userDoc)
     const user = {
-        username: username,
-        name: "Alex Chen",
+        username: userDoc.username,
+        name: userDoc.name,
         joinDate: "January 2024",
-        bio: "Passionate about mathematics and problem-solving. Love tackling challenging algebra and number theory problems. Currently studying Computer Science with a focus on algorithms.",
-        delta: 1250,
-        xp: 3420,
+        bio: userDoc.bio,
+        delta: userDoc.delta,
+        xp: userDoc.xp,
         stats: {
             submissions: 18,
             topRank: 1,

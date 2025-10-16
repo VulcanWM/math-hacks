@@ -48,6 +48,7 @@ export async function get_user_from_username(username: string){
     await dbConnect();
     const user = await User.findOne(
         { username: username },
+        null,
         { collation: { locale: "en", strength: 2 } }
     );
     return user == null ? false : user;
