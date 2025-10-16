@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema(
             of: String,
             default: {},
         },
-        badges: [String],
+        badges: {type: [String], default: []},
         delta: { type: Number, default: 0},
         xp: { type: Number, default: 0 },
     },
