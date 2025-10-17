@@ -191,6 +191,7 @@ export default function SetupAccountPage() {
                                     >
                                         {isPending ? "Setting up..." : "Complete Setup"}
                                     </Button>
+
                                 </div>
 
                                 <div className="pt-4 border-t">
