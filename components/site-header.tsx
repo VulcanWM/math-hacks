@@ -31,7 +31,7 @@ export function SiteHeader() {
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary group-hover:w-full transition-all" />
                     </Link>
                     <Link
-                        href="/user/demo"
+                        href="/profile"
                         className="text-base font-medium text-muted-foreground hover:text-accent transition-colors relative group"
                     >
                         Profile
