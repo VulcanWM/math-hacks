@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -47,7 +45,7 @@ export default function CreateMathathonPage() {
                             <CardHeader>
                                 <CardTitle>Mathathon Details</CardTitle>
                                 <CardDescription>
-                                    Provide information about the competition, including title, description, and timeline.
+                                    Provide information about the competition, including title, type, and timeline.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -61,33 +59,46 @@ export default function CreateMathathonPage() {
                                         </p>
                                     </div>
 
-                                    {/* Description */}
+                                    {/* Mathathon Type */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="description">Description *</Label>
-                                        <Textarea
-                                            id="description"
-                                            placeholder="Describe the mathathon, its goals, and what participants can expect..."
-                                            rows={6}
-                                            required
-                                        />
+                                        <Label htmlFor="mathathon-type">Mathathon Type *</Label>
+                                        <Select required>
+                                            <SelectTrigger id="mathathon-type">
+                                                <SelectValue placeholder="Select type" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="bi-weekly">Bi-weekly</SelectItem>
+                                                <SelectItem value="special">Special</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                         <p className="text-xs text-muted-foreground">
-                                            Provide a detailed overview to help participants understand the challenge
+                                            Specify whether bi-weekly or special mathathon
                                         </p>
                                     </div>
 
-                                    {/* Difficulty */}
+                                    {/* Theme */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="difficulty">Difficulty Level *</Label>
-                                        <Select required>
-                                            <SelectTrigger id="difficulty">
-                                                <SelectValue placeholder="Select difficulty" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="beginner">Beginner</SelectItem>
-                                                <SelectItem value="intermediate">Intermediate</SelectItem>
-                                                <SelectItem value="advanced">Advanced</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        <Label htmlFor="theme">Theme *</Label>
+                                        <Input id="theme" placeholder="e.g., Algebra, Geometry, Calculus" required />
+                                        <p className="text-xs text-muted-foreground">
+                                            Define the main mathematical focus area
+                                        </p>
+                                    </div>
+
+                                    {/* Delta Value */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="delta-value">Delta Value *</Label>
+                                        <Input
+                                            id="delta-value"
+                                            type="number"
+                                            placeholder="e.g., 10"
+                                            min="1"
+                                            defaultValue={100}
+                                            required
+                                        />
+                                        <p className="text-xs text-muted-foreground">
+                                            Determines how many delta user gains on submission
+                                        </p>
                                     </div>
 
                                     {/* Date Range */}
@@ -108,6 +119,18 @@ export default function CreateMathathonPage() {
                                         </div>
                                     </div>
 
+                                    {/* Declare Winner Date */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="declare-winner-date">Declare Winners Date *</Label>
+                                        <div className="relative">
+                                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                            <Input id="declare-winner-date" type="date" className="pl-10" required />
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Date when winners will officially be announced
+                                        </p>
+                                    </div>
+
                                     {/* Rules */}
                                     <div className="space-y-2">
                                         <Label htmlFor="rules">Rules & Guidelines</Label>
@@ -119,22 +142,6 @@ export default function CreateMathathonPage() {
                                         <p className="text-xs text-muted-foreground">
                                             Optional: Add specific rules or requirements for participants
                                         </p>
-                                    </div>
-
-                                    {/* Topics */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="topics">Topics Covered</Label>
-                                        <Input id="topics" placeholder="e.g., Algebra, Geometry, Number Theory (comma-separated)" />
-                                        <p className="text-xs text-muted-foreground">
-                                            Help participants understand what mathematical areas will be covered
-                                        </p>
-                                    </div>
-
-                                    {/* Max Participants */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="max-participants">Maximum Participants</Label>
-                                        <Input id="max-participants" type="number" placeholder="Leave empty for unlimited" min="1" />
-                                        <p className="text-xs text-muted-foreground">Optional: Set a cap on the number of participants</p>
                                     </div>
 
                                     {/* Submit Button */}
@@ -157,9 +164,8 @@ export default function CreateMathathonPage() {
                             </CardHeader>
                             <CardContent className="space-y-2 text-sm text-muted-foreground">
                                 <p>• Choose a clear, engaging title that reflects the mathematical focus</p>
-                                <p>• Provide detailed descriptions to help participants prepare</p>
-                                <p>• Set realistic timelines - typically 1-4 weeks works well</p>
-                                <p>• Clearly state difficulty level to attract the right audience</p>
+                                <p>• Set realistic timelines - typically 1–4 weeks works well</p>
+                                <p>• Clearly state difficulty level or type to attract the right audience</p>
                                 <p>• Include specific rules about submission formats and requirements</p>
                             </CardContent>
                         </Card>

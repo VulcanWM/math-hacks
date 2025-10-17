@@ -1,5 +1,6 @@
 import dbConnect from './mongodb';
 import User from '../models/User';
+import Mathathon from '../models/Mathathon';
 
 export async function create_user(
     email: string,

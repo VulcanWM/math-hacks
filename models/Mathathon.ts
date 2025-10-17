@@ -16,7 +16,7 @@ const MathathonSchema = new mongoose.Schema({
     ],
     mathathonType: {type: String, required: true},
     coverImage: { type: String }, // URL to image
-    topic: {type: String, required: true},
+    theme: {type: String, required: true},
     sponsors: [
         {
             name: String,
