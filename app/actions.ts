@@ -1,6 +1,6 @@
 'use server'
 
-import {get_user_from_email, create_user, create_mathathon} from "@/lib/database"
+import {get_user_from_email, create_user, create_mathathon, join_mathathon} from "@/lib/database"
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache'
@@ -65,9 +65,26 @@ export async function handleCreateMathathon({
 
     const result = await create_mathathon(title, mathathonType, theme, Number(deltaValue), new Date(startDate), new Date(endDate), new Date(declareWinnerDate), prizes, user._id)
 
+    revalidatePath('/')
 
-    // You’ll later replace this with your DB logic
-    // e.g., await Mathathon.create(mathathonData)
+    return result
+}
+
+export async function handleJoinMathathon({ mathathonId }: { mathathonId: string }) {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email || null
+
+    if (!email) {
+        return { success: false, message: 'You are not logged in.' }
+    }
+
+    const user = await get_user_from_email(email)
+
+    if (user == false) {
+        return { success: false, message: 'You are not logged in.' }
+    }
+
+    const result = await join_mathathon(user._id, mathathonId)
 
     revalidatePath('/')
 

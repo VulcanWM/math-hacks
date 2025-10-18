@@ -29,7 +29,9 @@ export default function CreateMathathonPage() {
     })
 
     const [prizes, setPrizes] = useState<{ prizeName: string; prize: string }[]>([
-        { prizeName: "", prize: "" },
+        { prizeName: "1st Prize", prize: "" },
+        { prizeName: "2nd Prize", prize: "" },
+        { prizeName: "3rd Prize", prize: "" },
     ])
 
     const addPrize = () => setPrizes([...prizes, { prizeName: "", prize: "" }])
