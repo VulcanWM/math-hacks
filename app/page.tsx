@@ -1,12 +1,18 @@
-// import Link from "next/link"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ArrowRight, Trophy, Users, Zap, Calendar, TrendingUp, Code } from "lucide-react"
+import { get_landing_mathathons } from "@/lib/database";
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage() {
+
+  const mathathons = await get_landing_mathathons();
+
   return (
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
@@ -117,16 +123,7 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  {
-                    title: "Mathathon #1",
-                    description: "Build a project about a secret theme, will be revealed on the day",
-                    participants: 4,
-                    daysLeft: 10,
-                    difficulty: "EASY",
-                    color: "primary",
-                  }
-                ].map((mathathon, i) => (
+                {mathathons.map((mathathon, i) => (
                     <Card
                         key={i}
                         className="border-2 border-border hover:border-primary/50 transition-all group accent-bar"
@@ -134,9 +131,9 @@ export default function HomePage() {
                       <CardHeader className="space-y-4">
                         <div className="flex items-start justify-between">
                           <Badge variant="outline" className="font-mono font-bold border-2">
-                            {mathathon.difficulty}
+                            {mathathon.status}
                           </Badge>
-                          <div className="flex items-center gap-1 font-mono text-sm font-bold text-primary">
+                          <div className={`flex items-center gap-1 font-mono text-sm font-bold ${mathathon.status == "current" ? "text-primary" : "text-amber-400"}`}>
                             <Calendar className="w-4 h-4" />
                             {mathathon.daysLeft}d
                           </div>
@@ -144,23 +141,20 @@ export default function HomePage() {
                         <CardTitle className="text-2xl font-bold leading-tight group-hover:text-primary transition-colors">
                           {mathathon.title}
                         </CardTitle>
-                        <CardDescription className="leading-relaxed">{mathathon.description}</CardDescription>
+                        <CardDescription className="leading-relaxed">Build any project about {mathathon.status == "future" ? "a secret theme, that will be revealed when it starts" : mathathon.theme}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-sm text-muted-foreground font-mono">
                             <Users className="w-4 h-4" />
-                            <span className="font-bold">{mathathon.participants}</span>
+                            <span className="font-bold">{mathathon.joins}</span>
                           </div>
                           <Button
                               size="sm"
                               asChild
                               className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                           >
-                            {/*<Link href={`/mathathon/${i + 1}`}>Join →</Link>*/}
-                            <a target="_blank" href="https://tally.so/r/w45MeA">
-                              Join →
-                            </a>
+                            <Link href={`/mathathon/${mathathon._id}`}>Join →</Link>
                           </Button>
                         </div>
                       </CardContent>

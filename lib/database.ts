@@ -4,14 +4,6 @@ import Mathathon from '../models/Mathathon';
 import Join from '../models/Join';
 import Submission from '../models/Submission';
 
-
-// need to add winners once i figure out how that works
-
-// if not joined, then show join button
-// if joined + b4 start time then disabled submit button
-// if submitted then view your submission button
-// if before declare winner time then view submission disabled
-
 function makeSlug(title: string) {
     return title
         .toLowerCase()
@@ -188,4 +180,47 @@ export async function join_mathathon(userId: string, mathathonId: string){
         });
         return { success: true, message: "You have joined" };
     }
+}
+
+export async function get_landing_mathathons() {
+    await dbConnect();
+
+    const today = new Date();
+
+    // Get current + future mathathons, limit 3
+    const mathathons = await Mathathon.find({
+        endDate: { $gte: today },
+    })
+        .sort({ startDate: 1 })
+        .limit(3);
+
+    const enriched = await Promise.all(
+        mathathons.map(async (mathathon) => {
+            const joins = await Join.countDocuments({ mathathon: mathathon._id });
+
+            let status: "current" | "future";
+            let daysLeft: number;
+
+            if (today >= mathathon.startDate && today <= mathathon.endDate) {
+                status = "current";
+                daysLeft = Math.ceil(
+                    (mathathon.endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+                );
+            } else if (today < mathathon.startDate) {
+                status = "future";
+                daysLeft = Math.ceil(
+                    (mathathon.startDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+                );
+            }
+
+            return {
+                ...mathathon.toObject(),
+                joins,
+                status,
+                daysLeft,
+            };
+        })
+    );
+
+    return enriched;
 }
