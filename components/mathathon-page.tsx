@@ -157,7 +157,7 @@ export default function MathathonPage(props: {
                                                 </Button>
                                             ) : (
                                                 <Button size="lg" asChild>
-                                                    <Link href={"/submission/" + props.userSubmission._id}>View Your Submission</Link>
+                                                    <Link href={typeof props.userSubmission !== "boolean" ? "/submission/" + props.userSubmission?._id : ""}>View Your Submission</Link>
                                                 </Button>
                                             )}
                                         </> : (

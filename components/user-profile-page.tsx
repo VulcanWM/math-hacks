@@ -111,89 +111,89 @@ export default function UserProfilePage(props: {username: string, userDoc: {
                     </div>
                 </section>
 
-                <div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Main Content */}
-                        <div className="lg:col-span-2 space-y-4">
-                            {submissions.map((submission) => (
-                                <Card key={submission._id} className="hover:shadow-md transition-shadow">
-                                    <CardHeader>
-                                        <div className="flex items-start justify-between mb-2">
-                                            <div className="flex-1">
-                                                <CardTitle className="text-lg text-balance">
-                                                    <Link
-                                                        href={`/submission/${submission._id}`}
-                                                        className="hover:text-primary transition-colors"
-                                                    >
-                                                        {submission.title}
-                                                    </Link>
-                                                </CardTitle>
-                                                <CardDescription className="mt-1">
-                                                    {submission.mathathon} • {submission.date}
-                                                </CardDescription>
-                                            </div>
-                                            <Badge className="bg-primary text-primary-foreground">
-                                                {submission.score}/100
-                                            </Badge>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Trophy className="w-4 h-4" />
-                                                <span>Rank #{submission.rank}</span>
-                                            </div>
-                                            <Button size="sm" variant="outline" asChild>
-                                                <Link href={`/submission/${submission.id}`}>View</Link>
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                {/*<div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">*/}
+                {/*    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">*/}
+                {/*        /!* Main Content *!/*/}
+                {/*        <div className="lg:col-span-2 space-y-4">*/}
+                {/*            {submissions.map((submission) => (*/}
+                {/*                <Card key={submission._id} className="hover:shadow-md transition-shadow">*/}
+                {/*                    <CardHeader>*/}
+                {/*                        <div className="flex items-start justify-between mb-2">*/}
+                {/*                            <div className="flex-1">*/}
+                {/*                                <CardTitle className="text-lg text-balance">*/}
+                {/*                                    <Link*/}
+                {/*                                        href={`/submission/${submission._id}`}*/}
+                {/*                                        className="hover:text-primary transition-colors"*/}
+                {/*                                    >*/}
+                {/*                                        {submission.title}*/}
+                {/*                                    </Link>*/}
+                {/*                                </CardTitle>*/}
+                {/*                                <CardDescription className="mt-1">*/}
+                {/*                                    {submission.mathathon} • {submission.date}*/}
+                {/*                                </CardDescription>*/}
+                {/*                            </div>*/}
+                {/*                            <Badge className="bg-primary text-primary-foreground">*/}
+                {/*                                {submission.score}/100*/}
+                {/*                            </Badge>*/}
+                {/*                        </div>*/}
+                {/*                    </CardHeader>*/}
+                {/*                    <CardContent>*/}
+                {/*                        <div className="flex items-center justify-between">*/}
+                {/*                            <div className="flex items-center gap-2 text-sm text-muted-foreground">*/}
+                {/*                                <Trophy className="w-4 h-4" />*/}
+                {/*                                <span>Rank #{submission.rank}</span>*/}
+                {/*                            </div>*/}
+                {/*                            <Button size="sm" variant="outline" asChild>*/}
+                {/*                                <Link href={`/submission/${submission.id}`}>View</Link>*/}
+                {/*                            </Button>*/}
+                {/*                        </div>*/}
+                {/*                    </CardContent>*/}
+                {/*                </Card>*/}
+                {/*            ))}*/}
+                {/*        </div>*/}
 
-                        {/* Sidebar */}
-                        <div className="space-y-6">
-                            {/* Achievements */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="text-lg flex items-center gap-2">
-                                        <Award className="w-5 h-5" />
-                                        Achievements
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    {user.achievements.map((achievement, i) => (
-                                        <div key={i} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                                            <div className="text-2xl">{achievement.icon}</div>
-                                            <div className="flex-1">
-                                                <p className="font-semibold text-sm">{achievement.title}</p>
-                                                <p className="text-xs text-muted-foreground">{achievement.description}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </CardContent>
-                            </Card>
+                {/*        /!* Sidebar *!/*/}
+                {/*        <div className="space-y-6">*/}
+                {/*            /!* Achievements *!/*/}
+                {/*            <Card>*/}
+                {/*                <CardHeader>*/}
+                {/*                    <CardTitle className="text-lg flex items-center gap-2">*/}
+                {/*                        <Award className="w-5 h-5" />*/}
+                {/*                        Achievements*/}
+                {/*                    </CardTitle>*/}
+                {/*                </CardHeader>*/}
+                {/*                <CardContent className="space-y-3">*/}
+                {/*                    {user.achievements.map((achievement, i) => (*/}
+                {/*                        <div key={i} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">*/}
+                {/*                            <div className="text-2xl">{achievement.icon}</div>*/}
+                {/*                            <div className="flex-1">*/}
+                {/*                                <p className="font-semibold text-sm">{achievement.title}</p>*/}
+                {/*                                <p className="text-xs text-muted-foreground">{achievement.description}</p>*/}
+                {/*                            </div>*/}
+                {/*                        </div>*/}
+                {/*                    ))}*/}
+                {/*                </CardContent>*/}
+                {/*            </Card>*/}
 
-                            {/* Activity Summary */}
-                            <Card className="bg-primary/5 border-primary/20">
-                                <CardHeader>
-                                    <CardTitle className="text-lg">Activity Summary</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3 text-sm">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-muted-foreground">Total Submissions</span>
-                                        <span className="font-semibold">{user.stats.submissions}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-muted-foreground">Best Rank</span>
-                                        <span className="font-semibold">#{user.stats.topRank}</span>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
-                </div>
+                {/*            /!* Activity Summary *!/*/}
+                {/*            <Card className="bg-primary/5 border-primary/20">*/}
+                {/*                <CardHeader>*/}
+                {/*                    <CardTitle className="text-lg">Activity Summary</CardTitle>*/}
+                {/*                </CardHeader>*/}
+                {/*                <CardContent className="space-y-3 text-sm">*/}
+                {/*                    <div className="flex items-center justify-between">*/}
+                {/*                        <span className="text-muted-foreground">Total Submissions</span>*/}
+                {/*                        <span className="font-semibold">{user.stats.submissions}</span>*/}
+                {/*                    </div>*/}
+                {/*                    <div className="flex items-center justify-between">*/}
+                {/*                        <span className="text-muted-foreground">Best Rank</span>*/}
+                {/*                        <span className="font-semibold">#{user.stats.topRank}</span>*/}
+                {/*                    </div>*/}
+                {/*                </CardContent>*/}
+                {/*            </Card>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </main>
 
             <SiteFooter />
