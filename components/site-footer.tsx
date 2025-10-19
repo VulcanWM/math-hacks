@@ -27,7 +27,7 @@ export function SiteFooter() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/submit" className="hover:text-foreground transition-colors">
+                                <Link href="/" className="hover:text-foreground transition-colors">
                                     Submit Solution
                                 </Link>
                             </li>

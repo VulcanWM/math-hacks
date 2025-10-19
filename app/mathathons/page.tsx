@@ -2,13 +2,19 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
+// import { Input } from "@/components/ui/input"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Calendar, Users, Search, Filter } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {get_current_mathathons, get_future_mathathons, get_past_mathathons} from "@/lib/database";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function MathathonsPage() {
+export const revalidate = 60;
+
+export default async function MathathonsPage() {
+    const current = await get_current_mathathons()
+    const future = await get_future_mathathons()
+    const past = await get_past_mathathons()
     const mathathons = [
         {
             id: 1,
@@ -89,7 +95,7 @@ export default function MathathonsPage() {
                         <div className="max-w-3xl">
                             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-balance">All Mathathons</h1>
                             <p className="text-lg text-muted-foreground leading-relaxed">
-                                Browse current, past, and upcoming math hackathons. Find the perfect challenge to build your next
+                                Browse current, past, and upcoming mathathons. Find the perfect challenge to build your next
                                 project.
                             </p>
                         </div>
@@ -97,74 +103,75 @@ export default function MathathonsPage() {
                 </section>
 
                 {/* Filters */}
-                <section className="py-8 border-b">
-                    <div className="container mx-auto max-w-7xl px-6 lg:px-12">
-                        <div className="flex flex-col md:flex-row gap-4">
-                            <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input placeholder="Search mathathons..." className="pl-10" />
-                            </div>
-                            <Select defaultValue="all">
-                                <SelectTrigger className="w-full md:w-[180px]">
-                                    <Filter className="h-4 w-4 mr-2" />
-                                    <SelectValue placeholder="Status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Status</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="upcoming">Upcoming</SelectItem>
-                                    <SelectItem value="completed">Completed</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Select defaultValue="all">
-                                <SelectTrigger className="w-full md:w-[180px]">
-                                    <SelectValue placeholder="Difficulty" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Levels</SelectItem>
-                                    <SelectItem value="beginner">Beginner</SelectItem>
-                                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                                    <SelectItem value="advanced">Advanced</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                </section>
+                {/*<section className="py-8 border-b">*/}
+                {/*    <div className="container mx-auto max-w-7xl px-6 lg:px-12">*/}
+                {/*        <div className="flex flex-col md:flex-row gap-4">*/}
+                {/*            <div className="relative flex-1">*/}
+                {/*                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />*/}
+                {/*                <Input placeholder="Search mathathons..." className="pl-10" />*/}
+                {/*            </div>*/}
+                {/*            <Select defaultValue="all">*/}
+                {/*                <SelectTrigger className="w-full md:w-[180px]">*/}
+                {/*                    <Filter className="h-4 w-4 mr-2" />*/}
+                {/*                    <SelectValue placeholder="Status" />*/}
+                {/*                </SelectTrigger>*/}
+                {/*                <SelectContent>*/}
+                {/*                    <SelectItem value="all">All Status</SelectItem>*/}
+                {/*                    <SelectItem value="active">Active</SelectItem>*/}
+                {/*                    <SelectItem value="upcoming">Upcoming</SelectItem>*/}
+                {/*                    <SelectItem value="completed">Completed</SelectItem>*/}
+                {/*                </SelectContent>*/}
+                {/*            </Select>*/}
+                {/*            <Select defaultValue="all">*/}
+                {/*                <SelectTrigger className="w-full md:w-[180px]">*/}
+                {/*                    <SelectValue placeholder="Difficulty" />*/}
+                {/*                </SelectTrigger>*/}
+                {/*                <SelectContent>*/}
+                {/*                    <SelectItem value="all">All Levels</SelectItem>*/}
+                {/*                    <SelectItem value="beginner">Beginner</SelectItem>*/}
+                {/*                    <SelectItem value="intermediate">Intermediate</SelectItem>*/}
+                {/*                    <SelectItem value="advanced">Advanced</SelectItem>*/}
+                {/*                </SelectContent>*/}
+                {/*            </Select>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</section>*/}
 
                 {/* Active Mathathons */}
                 <section className="py-12">
                     <div className="container mx-auto max-w-7xl px-6 lg:px-12">
                         <h2 className="text-2xl font-bold mb-6">Active Mathathons</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {mathathons
-                                .filter((m) => m.status === "active")
-                                .map((mathathon) => (
-                                    <Card key={mathathon.id} className="hover:shadow-lg transition-shadow">
+                            {current.map((mathathon) => (
+                                    <Card key={mathathon._id} className="hover:shadow-lg transition-shadow">
                                         <CardHeader>
                                             <div className="flex items-start justify-between mb-2">
-                                                <Badge variant="outline">{mathathon.difficulty}</Badge>
+                                                <Badge variant="outline">{mathathon.mathathonType}</Badge>
                                                 <Badge className="bg-primary/10 text-primary border-primary/20">
                                                     <Calendar className="w-3 h-3 mr-1" />
                                                     {mathathon.daysLeft}d left
                                                 </Badge>
                                             </div>
                                             <CardTitle className="text-xl text-balance">{mathathon.title}</CardTitle>
-                                            <CardDescription className="leading-relaxed">{mathathon.description}</CardDescription>
+                                            <CardDescription className="leading-relaxed">Build any project relating to the theme: {mathathon.theme}</CardDescription>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
                                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                 <Users className="w-4 h-4" />
-                                                <span>{mathathon.participants} participants</span>
+                                                <span>{mathathon.joins} participants</span>
                                             </div>
                                             <div className="text-xs text-muted-foreground">
-                                                {mathathon.startDate} - {mathathon.endDate}
+                                                {mathathon.startDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} - {mathathon.endDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                                             </div>
                                             <Button className="w-full" asChild>
-                                                <Link href={`/mathathon/${mathathon.id}`}>View Details</Link>
+                                                <Link href={`/mathathon/${mathathon._id}`}>View Details</Link>
                                             </Button>
                                         </CardContent>
                                     </Card>
                                 ))}
+                            {current.length === 0 && (
+                                <p className="text-amber-400">There are no mathathons going on right now!</p>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -174,22 +181,21 @@ export default function MathathonsPage() {
                     <div className="container mx-auto max-w-7xl px-6 lg:px-12">
                         <h2 className="text-2xl font-bold mb-6">Upcoming Mathathons</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {mathathons
-                                .filter((m) => m.status === "upcoming")
+                            {future
                                 .map((mathathon) => (
-                                    <Card key={mathathon.id} className="hover:shadow-lg transition-shadow">
+                                    <Card key={mathathon._id} className="hover:shadow-lg transition-shadow">
                                         <CardHeader>
                                             <div className="flex items-start justify-between mb-2">
-                                                <Badge variant="outline">{mathathon.difficulty}</Badge>
+                                                <Badge variant="outline">{mathathon.mathathonType}</Badge>
                                                 <Badge variant="secondary">Coming Soon</Badge>
                                             </div>
                                             <CardTitle className="text-xl text-balance">{mathathon.title}</CardTitle>
-                                            <CardDescription className="leading-relaxed">{mathathon.description}</CardDescription>
+                                            <CardDescription className="leading-relaxed">the bi-weekly mathathon which is based on a secret theme...</CardDescription>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
-                                            <div className="text-xs text-muted-foreground">Starts: {mathathon.startDate}</div>
+                                            <div className="text-xs text-muted-foreground">Starts: {mathathon.startDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
                                             <Button variant="outline" className="w-full bg-transparent" asChild>
-                                                <Link href={`/mathathon/${mathathon.id}`}>Learn More</Link>
+                                                <Link href={`/mathathon/${mathathon._id}`}>Learn More</Link>
                                             </Button>
                                         </CardContent>
                                     </Card>
@@ -198,37 +204,36 @@ export default function MathathonsPage() {
                     </div>
                 </section>
 
-                {/* Past Mathathons */}
-                <section className="py-12">
-                    <div className="container mx-auto max-w-7xl px-6 lg:px-12">
-                        <h2 className="text-2xl font-bold mb-6">Past Mathathons</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {mathathons
-                                .filter((m) => m.status === "completed")
-                                .map((mathathon) => (
-                                    <Card key={mathathon.id} className="hover:shadow-lg transition-shadow opacity-90">
-                                        <CardHeader>
-                                            <div className="flex items-start justify-between mb-2">
-                                                <Badge variant="outline">{mathathon.difficulty}</Badge>
-                                                <Badge variant="secondary">Completed</Badge>
-                                            </div>
-                                            <CardTitle className="text-xl text-balance">{mathathon.title}</CardTitle>
-                                            <CardDescription className="leading-relaxed">{mathathon.description}</CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4">
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Users className="w-4 h-4" />
-                                                <span>{mathathon.participants} participants</span>
-                                            </div>
-                                            <Button variant="outline" className="w-full bg-transparent" asChild>
-                                                <Link href={`/browse-mathathon/${mathathon.id}`}>View Submissions</Link>
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                        </div>
-                    </div>
-                </section>
+                {/*/!* Past Mathathons *!/*/}
+                {/*<section className="py-12">*/}
+                {/*    <div className="container mx-auto max-w-7xl px-6 lg:px-12">*/}
+                {/*        <h2 className="text-2xl font-bold mb-6">Past Mathathons</h2>*/}
+                {/*        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">*/}
+                {/*            {past*/}
+                {/*                .map((mathathon) => (*/}
+                {/*                    <Card key={mathathon.id} className="hover:shadow-lg transition-shadow opacity-90">*/}
+                {/*                        <CardHeader>*/}
+                {/*                            <div className="flex items-start justify-between mb-2">*/}
+                {/*                                <Badge variant="outline">{mathathon.mathathonType}</Badge>*/}
+                {/*                                <Badge variant="secondary">Completed</Badge>*/}
+                {/*                            </div>*/}
+                {/*                            <CardTitle className="text-xl text-balance">{mathathon.title}</CardTitle>*/}
+                {/*                            <CardDescription className="leading-relaxed">Theme: {mathathon.theme}</CardDescription>*/}
+                {/*                        </CardHeader>*/}
+                {/*                        <CardContent className="space-y-4">*/}
+                {/*                            <div className="flex items-center gap-2 text-sm text-muted-foreground">*/}
+                {/*                                <Users className="w-4 h-4" />*/}
+                {/*                                <span>{mathathon.joins} participants</span>*/}
+                {/*                            </div>*/}
+                {/*                            <Button variant="outline" className="w-full bg-transparent" asChild>*/}
+                {/*                                <Link href={`/browse-mathathon/${mathathon._id}`}>View Submissions</Link>*/}
+                {/*                            </Button>*/}
+                {/*                        </CardContent>*/}
+                {/*                    </Card>*/}
+                {/*                ))}*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</section>*/}
             </main>
 
             <SiteFooter />

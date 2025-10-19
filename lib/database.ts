@@ -3,6 +3,12 @@ import User from '../models/User';
 import Mathathon from '../models/Mathathon';
 import Join from '../models/Join';
 import Submission from '../models/Submission';
+import mongoose from 'mongoose';
+
+interface MongoDuplicateError extends Error {
+    code?: number;
+    keyPattern?: Record<string, boolean>;
+}
 
 function makeSlug(title: string) {
     return title
@@ -21,6 +27,7 @@ export async function create_user(
     links: { [key: string]: string }
 ) {
     await dbConnect();
+
     try {
         await User.create({
             email,
@@ -30,19 +37,26 @@ export async function create_user(
             links: links || {},
         });
         return true;
-    } catch (err: any) {
-        if (err.name === "ValidationError") {
-            // handles maxlength, required fields, etc.
-            return Object.values(err.errors).map(e => e.message).join(", ")
+    } catch (err: unknown) {
+        // Handle validation errors (required, maxlength, etc.)
+        if (err instanceof mongoose.Error.ValidationError) {
+            return Object.values(err.errors)
+                .map((e) => e.message)
+                .join(", ");
         }
-        if (err.code === 11000) {
-            // duplicate key error
-            if (err.keyPattern?.email) return "Email already in use"
-            if (err.keyPattern?.username) return"Username already in use"
+
+        // Handle duplicate key errors (email/username already in use)
+        const mongoErr = err as MongoDuplicateError;
+        if (mongoErr.code === 11000 && mongoErr.keyPattern) {
+            if (mongoErr.keyPattern.email) return "Email already in use";
+            if (mongoErr.keyPattern.username) return "Username already in use";
         }
-        return err; // rethrow anything unexpected
+
+        // Fallback for unexpected errors
+        return "An unexpected error occurred";
     }
 }
+
 
 export async function get_user_from_id(id: string){
     await dbConnect();
@@ -65,6 +79,7 @@ export async function get_user_from_username(username: string){
     );
     return user == null ? false : user;
 }
+
 
 export async function create_mathathon(
     title: string,
@@ -111,23 +126,25 @@ export async function create_mathathon(
         });
 
         return { success: true, message: slug };
-    } catch (err: any) {
+    } catch (err: unknown) {
         // Handle validation errors (required fields, type mismatches, etc.)
-        if (err.name === "ValidationError") {
+        if (err instanceof mongoose.Error.ValidationError) {
             const message = Object.values(err.errors)
-                .map((e: any) => e.message)
+                .map((e) => e.message)
                 .join(", ");
             return { success: false, message };
         }
 
         // Handle duplicate key error (same slug already exists)
-        if (err.code === 11000) {
-            if (err.keyPattern?._id) {
-                return { success: false, message: "A mathathon with this title already exists." };
-            }
+        const mongoErr = err as MongoDuplicateError;
+        if (mongoErr.code === 11000 && mongoErr.keyPattern?._id) {
+            return {
+                success: false,
+                message: "A mathathon with this title already exists.",
+            };
         }
 
-        // Handle other unexpected errors
+        // Handle unexpected errors
         console.error("Error creating mathathon:", err);
         return { success: false, message: "Unexpected server error." };
     }

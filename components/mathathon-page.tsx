@@ -77,8 +77,6 @@ export default function MathathonPage(props: {
         timeLeft = "Completely finished";
     }
 
-    console.log(status)
-
     // Prepare prizes
     const prizes = mathathonDoc.prizes.map((p) => {
         let multiplier = 1;

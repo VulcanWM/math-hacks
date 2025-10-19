@@ -8,4 +8,10 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GITHUB_SECRET as string,
         })
     ],
+    callbacks: {
+        async redirect({ url, baseUrl }) {
+            // Always redirect to /setup-account after login
+            return `${baseUrl}/setup-account`
+        },
+    },
 };

@@ -43,18 +43,12 @@ export default async function HomePage() {
                         asChild
                         className="text-lg h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                     >
-                      {/*<Link href="/mathathons">*/}
-                      {/*  Start Building <ArrowRight className="ml-2 h-5 w-5" />*/}
-                      {/*</Link>*/}
-                      <a target="_blank" href="https://tally.so/r/w45MeA">
+                      <Link href="/mathathons">
                         Start Building <ArrowRight className="ml-2 h-5 w-5" />
-                      </a>
+                      </Link>
                     </Button>
                     <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
-                      {/*<Link href="/submit">Submit Project</Link>*/}
-                      <a target="_blank" href="https://tally.so/r/w45MeA">
-                        Submit Project
-                      </a>
+                      <Link href="/mathathons">Submit Project</Link>
                     </Button>
                   </div>
                 </div>
@@ -113,12 +107,9 @@ export default async function HomePage() {
                   <p className="text-lg text-muted-foreground font-mono">&#x2f;&#x2f; Pick your challenge</p>
                 </div>
                 <Button variant="ghost" asChild className="text-primary font-bold">
-                  {/*<Link href="/mathathons">*/}
-                  {/*  View All <ArrowRight className="ml-2 h-4 w-4" />*/}
-                  {/*</Link>*/}
-                  <a target="_blank" href="https://tally.so/r/w45MeA">
+                  <Link href="/mathathons">
                     View All <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
+                  </Link>
                 </Button>
               </div>
 
@@ -229,16 +220,10 @@ export default async function HomePage() {
                         asChild
                         className="text-lg h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
                     >
-                      {/*<Link href="/mathathons">Browse Mathathons</Link>*/}
-                      <a target="_blank" href="https://tally.so/r/w45MeA">
-                        Browse Mathathons
-                      </a>
+                      <Link href="/mathathons">Browse Mathathons</Link>
                     </Button>
                     <Button size="lg" variant="secondary-outline" asChild className="text-lg h-14 px-8">
-                      {/*<Link href="/create-mathathon">Create Your Own</Link>*/}
-                      <a target="_blank" href="https://tally.so/r/w45MeA">
-                        Create Your Own
-                      </a>
+                      <Link href="/create-mathathon">Create Your Own</Link>
                     </Button>
                   </div>
                 </CardHeader>
