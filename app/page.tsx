@@ -109,7 +109,7 @@ export default async function HomePage() {
             <div className="container mx-auto max-w-7xl px-6 lg:px-12">
               <div className="flex items-end justify-between mb-12">
                 <div>
-                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">Live Mathathons</h2>
+                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">Live + Upcoming Mathathons</h2>
                   <p className="text-lg text-muted-foreground font-mono">&#x2f;&#x2f; Pick your challenge</p>
                 </div>
                 <Button variant="ghost" asChild className="text-primary font-bold">

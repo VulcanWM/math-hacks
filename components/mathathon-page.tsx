@@ -44,7 +44,7 @@ export default function MathathonPage(props: {
     joins: number;
     submissions: number;
     userJoined: boolean;
-    userSubmission: false | { title: string, _id: string };
+    userSubmission: boolean | { title: string, _id: string };
     isUser: boolean,
     loggedIn: boolean
 }) {

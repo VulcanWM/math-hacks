@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Space_Mono, Outfit } from "next/font/google"
 import { Suspense } from "react"
 import "./globals.css"
+import Script from "next/script"
 
 const spaceMono = Space_Mono({
     subsets: ["latin"],
@@ -32,6 +33,16 @@ export default function RootLayout({
         <html lang="en" className={`dark ${spaceMono.variable} ${outfit.variable}`}>
         <body className="font-sans antialiased">
         <Suspense fallback={null}>{children}</Suspense>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-TRXF6CCJTR" />
+        <Script id="google-analytics">
+            {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', 'G-TRXF6CCJTR');
+        `}
+        </Script>
         </body>
         </html>
     )

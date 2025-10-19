@@ -190,6 +190,7 @@ export async function get_landing_mathathons() {
     // Get current + future mathathons, limit 3
     const mathathons = await Mathathon.find({
         endDate: { $gte: today },
+        _id: { $ne: "test-mathathon" }
     })
         .sort({ startDate: 1 })
         .limit(3);
@@ -218,6 +219,85 @@ export async function get_landing_mathathons() {
                 joins,
                 status,
                 daysLeft,
+            };
+        })
+    );
+
+    return enriched;
+}
+
+export async function get_user_submissions(userId: string){
+    await dbConnect();
+
+    const submissions = await Submission.find({participant: userId});
+    return submissions;
+}
+
+export async function get_current_mathathons() {
+    await dbConnect();
+
+    const today = new Date();
+
+    const mathathons = await Mathathon.find({
+        startDate: { $lte: today },
+        endDate: { $gte: today },
+        _id: { $ne: "test-mathathon" },
+    })
+        .sort({ startDate: 1 })
+        .limit(3);
+
+    const enriched = await Promise.all(
+        mathathons.map(async (mathathon) => {
+            const joins = await Join.countDocuments({ mathathon: mathathon._id });
+            const daysLeft = Math.ceil(
+                (mathathon.endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+            );
+
+            return {
+                ...mathathon.toObject(),
+                joins,
+                daysLeft,
+            };
+        })
+    );
+
+    return enriched;
+}
+
+export async function get_future_mathathons() {
+    await dbConnect();
+
+    const today = new Date();
+
+    const mathathons = await Mathathon.find({
+        startDate: { $gt: today },
+        _id: { $ne: "test-mathathon" },
+    })
+        .sort({ startDate: 1 })
+        .limit(3);
+
+    // No joins or daysLeft for future ones
+    return mathathons.map((m) => m.toObject());
+}
+
+export async function get_past_mathathons() {
+    await dbConnect();
+
+    const today = new Date();
+
+    const mathathons = await Mathathon.find({
+        endDate: { $lt: today },
+        _id: { $ne: "test-mathathon" },
+    })
+        .sort({ endDate: -1 }) // most recent first
+        .limit(6);
+
+    const enriched = await Promise.all(
+        mathathons.map(async (mathathon) => {
+            const joins = await Join.countDocuments({ mathathon: mathathon._id });
+            return {
+                ...mathathon.toObject(),
+                joins,
             };
         })
     );

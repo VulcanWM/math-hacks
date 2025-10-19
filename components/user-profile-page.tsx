@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Trophy, Calendar, Target, Award } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function UserProfilePage(props: {username: string, userDoc: {
     username: string, name: string, bio: string, delta: number, xp: number
-}}) {
+}, submissions: {_id: string, title: string, description: string}[]}) {
     const {userDoc} = props
+    const {submissions} = props
     const user = {
         username: userDoc.username,
         name: userDoc.name,
@@ -27,32 +27,6 @@ export default function UserProfilePage(props: {username: string, userDoc: {
             { title: "Perfect Score", description: "Number Theory Quest", icon: "💯" },
             { title: "Top 10 Finisher", description: "5 times", icon: "⭐" },
             { title: "Early Adopter", description: "Joined in 2024", icon: "🚀" },
-        ],
-        mathathons: [
-            {
-                id: 1,
-                title: "Spring Algebra Sprint",
-                status: "completed",
-                rank: 1,
-                score: 98,
-                date: "May 2025",
-            },
-            {
-                id: 3,
-                title: "Number Theory Quest",
-                status: "completed",
-                rank: 4,
-                score: 100,
-                date: "April 2025",
-            },
-            {
-                id: 2,
-                title: "Geometry Masters",
-                status: "active",
-                rank: null,
-                score: null,
-                date: "In Progress",
-            },
         ],
         submissions: [
             {
@@ -140,97 +114,42 @@ export default function UserProfilePage(props: {username: string, userDoc: {
                 <div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Main Content */}
-                        <div className="lg:col-span-2">
-                            <Tabs defaultValue="submissions" className="space-y-6">
-                                <TabsList className="grid w-full grid-cols-2">
-                                    <TabsTrigger value="submissions">Submissions</TabsTrigger>
-                                    <TabsTrigger value="mathathons">Mathathons</TabsTrigger>
-                                </TabsList>
-
-                                {/* Submissions Tab */}
-                                <TabsContent value="submissions" className="space-y-4">
-                                    {user.submissions.map((submission) => (
-                                        <Card key={submission.id} className="hover:shadow-md transition-shadow">
-                                            <CardHeader>
-                                                <div className="flex items-start justify-between mb-2">
-                                                    <div className="flex-1">
-                                                        <CardTitle className="text-lg text-balance">
-                                                            <Link
-                                                                href={`/submission/${submission.id}`}
-                                                                className="hover:text-primary transition-colors"
-                                                            >
-                                                                {submission.title}
-                                                            </Link>
-                                                        </CardTitle>
-                                                        <CardDescription className="mt-1">
-                                                            {submission.mathathon} • {submission.date}
-                                                        </CardDescription>
-                                                    </div>
-                                                    <Badge className="bg-primary text-primary-foreground">{submission.score}/100</Badge>
-                                                </div>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                        <Trophy className="w-4 h-4" />
-                                                        <span>Rank #{submission.rank}</span>
-                                                    </div>
-                                                    <Button size="sm" variant="outline" asChild>
-                                                        <Link href={`/submission/${submission.id}`}>View</Link>
-                                                    </Button>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                </TabsContent>
-
-                                {/* Mathathons Tab */}
-                                <TabsContent value="mathathons" className="space-y-4">
-                                    {user.mathathons.map((mathathon) => (
-                                        <Card key={mathathon.id} className="hover:shadow-md transition-shadow">
-                                            <CardHeader>
-                                                <div className="flex items-start justify-between mb-2">
-                                                    <div className="flex-1">
-                                                        <CardTitle className="text-lg text-balance">
-                                                            <Link
-                                                                href={`/mathathon/${mathathon.id}`}
-                                                                className="hover:text-primary transition-colors"
-                                                            >
-                                                                {mathathon.title}
-                                                            </Link>
-                                                        </CardTitle>
-                                                        <CardDescription className="mt-1">{mathathon.date}</CardDescription>
-                                                    </div>
-                                                    <Badge variant={mathathon.status === "active" ? "default" : "secondary"}>
-                                                        {mathathon.status}
-                                                    </Badge>
-                                                </div>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="flex items-center justify-between">
-                                                    {mathathon.status === "completed" ? (
-                                                        <div className="flex items-center gap-4 text-sm">
-                                                            <div className="flex items-center gap-1 text-muted-foreground">
-                                                                <Trophy className="w-4 h-4" />
-                                                                <span>Rank #{mathathon.rank}</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-1 text-muted-foreground">
-                                                                <Target className="w-4 h-4" />
-                                                                <span>Score: {mathathon.score}/100</span>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-sm text-muted-foreground">Currently participating</span>
-                                                    )}
-                                                    <Button size="sm" variant="outline" asChild>
-                                                        <Link href={`/mathathon/${mathathon.id}`}>View</Link>
-                                                    </Button>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                </TabsContent>
-                            </Tabs>
+                        <div className="lg:col-span-2 space-y-4">
+                            {submissions.map((submission) => (
+                                <Card key={submission._id} className="hover:shadow-md transition-shadow">
+                                    <CardHeader>
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div className="flex-1">
+                                                <CardTitle className="text-lg text-balance">
+                                                    <Link
+                                                        href={`/submission/${submission._id}`}
+                                                        className="hover:text-primary transition-colors"
+                                                    >
+                                                        {submission.title}
+                                                    </Link>
+                                                </CardTitle>
+                                                <CardDescription className="mt-1">
+                                                    {submission.mathathon} • {submission.date}
+                                                </CardDescription>
+                                            </div>
+                                            <Badge className="bg-primary text-primary-foreground">
+                                                {submission.score}/100
+                                            </Badge>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <Trophy className="w-4 h-4" />
+                                                <span>Rank #{submission.rank}</span>
+                                            </div>
+                                            <Button size="sm" variant="outline" asChild>
+                                                <Link href={`/submission/${submission.id}`}>View</Link>
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </div>
 
                         {/* Sidebar */}
