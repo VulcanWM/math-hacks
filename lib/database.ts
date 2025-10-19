@@ -216,8 +216,8 @@ export async function get_landing_mathathons() {
         mathathons.map(async (mathathon) => {
             const joins = await Join.countDocuments({ mathathon: mathathon._id });
 
-            let status: "current" | "future";
-            let daysLeft: number;
+            let status: "current" | "future" = "future";
+            let daysLeft: number = 0;
 
             if (today >= mathathon.startDate && today <= mathathon.endDate) {
                 status = "current";
