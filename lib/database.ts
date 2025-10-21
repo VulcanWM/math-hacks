@@ -434,4 +434,16 @@ export async function give_xp(userId: string, xp: number) {
     return true;
 }
 
+export async function get_mathathon_submissions(mathathonId: string) {
+    await dbConnect();
 
+    const submissions = await Submission.find({ mathathon: mathathonId });
+    return submissions;
+}
+
+export async function get_submission_from_id(submissionId: string) {
+    await dbConnect();
+
+    const submission = await Submission.findOne({_id: submissionId}).populate("mathathon");
+    return submission == null ? false : submission;
+}

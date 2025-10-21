@@ -6,9 +6,12 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ThumbsUp, Eye, Calendar, Trophy, FileText, ExternalLink } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { get_submission_from_id} from "@/lib/database";
 
 export default async function SubmissionDetailPage({ params }: { params: { id: string } }) {
     const {id} = await params;
+
+    console.log()
     const submission = {
         id: id,
         title: "Elegant Proof Using Mathematical Induction",
