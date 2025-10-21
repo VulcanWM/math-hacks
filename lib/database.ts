@@ -356,6 +356,9 @@ export async function submit_submission(
             runnableLink,
         });
 
+        await give_delta(user._id, mathathon.delta)
+        await give_xp(user._id, mathathon.delta)
+
         return { success: true, message: submission };
     } catch (err: unknown) {
         if (err instanceof mongoose.Error.ValidationError) {
@@ -375,3 +378,28 @@ export async function submit_submission(
         return { success: false, message: "An unexpected error occurred while submitting." };
     }
 }
+
+export async function give_delta(userId: string, delta: number) {
+    await dbConnect();
+
+    const user = await get_user_from_id(userId);
+    if (!user) return false;
+
+    user.delta += delta;
+    await user.save();
+
+    return true;
+}
+
+export async function give_xp(userId: string, xp: number) {
+    await dbConnect();
+
+    const user = await get_user_from_id(userId);
+    if (!user) return false;
+
+    user.xp += xp;
+    await user.save();
+
+    return true;
+}
+
