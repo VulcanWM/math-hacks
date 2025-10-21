@@ -359,6 +359,38 @@ export async function submit_submission(
         await give_delta(user._id, mathathon.delta)
         await give_xp(user._id, mathathon.delta)
 
+        // const numberOfSubmissions = await Submission.countDocuments({ participant: user._id });
+        //
+        // const submissionBadges: { [key: string]: number } = {
+        //     "4^0 Submissions": 1,
+        //     "4^1 Submissions": 4,
+        //     "4^2 Submissions": 16,
+        //     "4^3 Submissions": 64,
+        //     "4^4 Submissions": 256,
+        // };
+        //
+        // for (const [badgeName, value] of Object.entries(submissionBadges)) {
+        //     if (numberOfSubmissions === value) {
+        //         if (!user.badges.includes(badgeName)) {
+        //             user.badges.push(badgeName);
+        //         }
+        //     }
+        // }
+
+        // can just use this
+
+        // const badges = [];
+        // const powers = [1, 4, 16, 64, 256];
+        // for (let i = 0; i < powers.length; i++) {
+        //     if (submissionCount >= powers[i]) {
+        //         badges.push(`4^${i} Submissions`);
+        //     }
+        // }
+
+
+        await user.save()
+
+
         return { success: true, message: submission };
     } catch (err: unknown) {
         if (err instanceof mongoose.Error.ValidationError) {
@@ -402,4 +434,5 @@ export async function give_xp(userId: string, xp: number) {
 
     return true;
 }
+
 
