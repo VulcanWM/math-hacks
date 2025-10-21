@@ -38,5 +38,5 @@ export default async function Mathathon({ params }: { params: { id: string } }) 
         }
     }
 
-    return <MathathonPage mathathonDoc={JSON.parse(JSON.stringify(mathathonDoc))} joins={joins} submissions={submissions} userJoined={userJoined} userSubmission={userSubmission} loggedIn={loggedIn} isUser={isUser} />
+    return <MathathonPage mathathonDoc={JSON.parse(JSON.stringify(mathathonDoc))} joins={joins} submissions={JSON.parse(JSON.stringify(submissions))} userJoined={userJoined} userSubmission={JSON.parse(JSON.stringify(userSubmission))} loggedIn={loggedIn} isUser={isUser} />
 }

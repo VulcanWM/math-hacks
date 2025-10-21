@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,27 +8,60 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { Upload, LinkIcon, FileText } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { FileText } from "lucide-react"
+import { handleSubmitSubmission } from "@/app/actions"
+import { useRouter } from "next/navigation"
 
-export default function SubmitPage() {
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [fileName, setFileName] = useState<string>("")
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (file) {
-            setFileName(file.name)
-        }
+export default function SubmitPage(props: {
+    mathathon: {
+        _id: string
+        title: string
+        theme: string
+        mathathonType: string
+        startDate: string | Date
+        endDate: string | Date
+        declareWinnerDate: string | Date
+        deltaValue: number
+        prizes: { prizeName: string; prize: string }[]
     }
+}) {
+    const { mathathon } = props
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter()
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    // Form fields
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+    const [thumbnail, setThumbnail] = useState("")
+    const [repoLink, setRepoLink] = useState("")
+    const [runnableLink, setRunnableLink] = useState("")
+    const [message, setMessage] = useState<{ type: "success" | "error" | ""; text: string }>({ type: "", text: "" })
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        setIsSubmitting(true)
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500))
-        setIsSubmitting(false)
-        alert("Submission successful!")
+
+        if (!title || !description || !repoLink || !runnableLink || !thumbnail) {
+            setMessage({ type: "error", text: "Please fill in all required fields." })
+            return
+        }
+
+        startTransition(async () => {
+            const result = await handleSubmitSubmission({
+                mathathonId: mathathon._id,
+                title,
+                description,
+                thumbnail,
+                repoLink,
+                runnableLink,
+            })
+
+            if (result.success) {
+                setMessage({ type: "success", text: result.message })
+                router.push("/submission/" + String(result.message._id))
+            } else {
+                setMessage({ type: "error", text: result.message || "Something went wrong." })
+            }
+        })
     }
 
     return (
@@ -41,124 +72,110 @@ export default function SubmitPage() {
                 <div className="container mx-auto max-w-7xl px-6 lg:px-12">
                     <div className="max-w-3xl mx-auto">
                         <div className="mb-8">
-                            <h1 className="text-4xl font-bold tracking-tight mb-4 text-balance">Submit Your Project</h1>
+                            <h1 className="text-4xl font-bold tracking-tight mb-4 text-balance">
+                                Submit Your Project to {mathathon.title}
+                            </h1>
                             <p className="text-lg text-muted-foreground leading-relaxed">
-                                Share your math project with the community. Upload your website, tool, or visualization.
+                                Share your math project with the community. Upload your website, tool, or visualisation.
                             </p>
                         </div>
 
-                        {/* Form */}
                         <Card>
                             <CardHeader>
                                 <CardTitle>Submission Details</CardTitle>
-                                <CardDescription>Fill in the information below to submit your solution to a mathathon.</CardDescription>
+                                <CardDescription>
+                                    Fill in the information below to submit your solution to {mathathon.title}.
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <form onSubmit={handleSubmit} className="space-y-6">
-                                    {/* Select Mathathon */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="mathathon">Select Mathathon *</Label>
-                                        <Select required>
-                                            <SelectTrigger id="mathathon">
-                                                <SelectValue placeholder="Choose a mathathon" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="1">Spring Algebra Sprint</SelectItem>
-                                                <SelectItem value="2">Geometry Masters</SelectItem>
-                                                <SelectItem value="3">Number Theory Quest</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <p className="text-xs text-muted-foreground">Select which mathathon you&apos;re submitting for</p>
-                                    </div>
-
-                                    {/* Submission Title */}
+                                    {/* Title */}
                                     <div className="space-y-2">
                                         <Label htmlFor="title">Submission Title *</Label>
-                                        <Input id="title" placeholder="e.g., Elegant Proof Using Induction" required />
-                                        <p className="text-xs text-muted-foreground">Give your submission a descriptive title</p>
-                                    </div>
-
-                                    {/* Solution Description */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="description">Solution Description *</Label>
-                                        <Textarea
-                                            id="description"
-                                            placeholder="Explain your approach, methodology, and key insights..."
-                                            rows={8}
+                                        <Input
+                                            id="title"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                            placeholder="e.g., Guessing Game about Sequences"
                                             required
                                         />
-                                        <p className="text-xs text-muted-foreground">Describe your solution process and reasoning</p>
                                     </div>
 
-                                    {/* File Upload */}
+                                    {/* Description */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="file">Upload File (Optional)</Label>
-                                        <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
-                                            <input
-                                                id="file"
-                                                type="file"
-                                                className="hidden"
-                                                onChange={handleFileChange}
-                                                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-                                            />
-                                            <label htmlFor="file" className="cursor-pointer">
-                                                <Upload className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
-                                                {fileName ? (
-                                                    <div className="space-y-1">
-                                                        <p className="text-sm font-medium text-foreground">{fileName}</p>
-                                                        <p className="text-xs text-muted-foreground">Click to change file</p>
-                                                    </div>
-                                                ) : (
-                                                    <div className="space-y-1">
-                                                        <p className="text-sm font-medium text-foreground">Click to upload</p>
-                                                        <p className="text-xs text-muted-foreground">PDF, DOC, TXT, or images (max 10MB)</p>
-                                                    </div>
-                                                )}
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    {/* External Links */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="links">External Links (Optional)</Label>
-                                        <div className="relative">
-                                            <LinkIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                            <Textarea
-                                                id="links"
-                                                placeholder="Add links to external resources, code repositories, or additional materials (one per line)"
-                                                rows={3}
-                                                className="pl-10"
-                                            />
-                                        </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Include any relevant external resources or supplementary materials
-                                        </p>
-                                    </div>
-
-                                    {/* Additional Notes */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="notes">Additional Notes (Optional)</Label>
+                                        <Label htmlFor="description">Submission Description *</Label>
                                         <Textarea
-                                            id="notes"
-                                            placeholder="Any additional comments, acknowledgments, or context..."
-                                            rows={3}
+                                            id="description"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            rows={6}
+                                            placeholder="Explain your project.."
+                                            required
                                         />
                                     </div>
 
-                                    {/* Submit Button */}
+                                    {/* Thumbnail */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="thumbnail">Thumbnail URL *</Label>
+                                        <Input
+                                            id="thumbnail"
+                                            type="url"
+                                            value={thumbnail}
+                                            onChange={(e) => setThumbnail(e.target.value)}
+                                            placeholder="https://example.com/thumbnail.png"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Repo link */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="repo">Repository Link *</Label>
+                                        <Input
+                                            id="repo"
+                                            type="url"
+                                            value={repoLink}
+                                            onChange={(e) => setRepoLink(e.target.value)}
+                                            placeholder="https://github.com/username/project"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Runnable link */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="runnable">Runnable Link *</Label>
+                                        <Input
+                                            id="runnable"
+                                            type="url"
+                                            value={runnableLink}
+                                            onChange={(e) => setRunnableLink(e.target.value)}
+                                            placeholder="https://your-project-demo.vercel.app"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Message */}
+                                    {message.text && (
+                                        <p
+                                            className={`text-sm ${
+                                                message.type === "success"
+                                                    ? "text-green-600"
+                                                    : "text-red-600"
+                                            }`}
+                                        >
+                                            {message.text}
+                                        </p>
+                                    )}
+
+                                    {/* Submit */}
                                     <div className="flex gap-4 pt-4">
-                                        <Button type="submit" className="flex-1" disabled={isSubmitting}>
-                                            {isSubmitting ? "Submitting..." : "Submit Solution"}
-                                        </Button>
-                                        <Button type="button" variant="outline" disabled={isSubmitting}>
-                                            Save Draft
+                                        <Button type="submit" className="flex-1" disabled={isPending}>
+                                            {isPending ? "Submitting..." : "Submit Solution"}
                                         </Button>
                                     </div>
                                 </form>
                             </CardContent>
                         </Card>
 
-                        {/* Guidelines Card */}
                         <Card className="mt-6 border-secondary/20 bg-secondary/5">
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
@@ -167,12 +184,11 @@ export default function SubmitPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2 text-sm text-muted-foreground">
-                                <p>• Clearly explain your solution process and reasoning</p>
-                                <p>• Show all work and intermediate steps</p>
-                                <p>• Use proper mathematical notation and formatting</p>
-                                <p>• Cite any external resources or references used</p>
-                                <p>• Ensure all uploaded files are readable and well-organized</p>
-                                <p>• Submissions are final once the mathathon deadline passes</p>
+                                <p>• All submissions must be original work</p>
+                                <p>• Collaboration is allowed but only one person gets the prize</p>
+                                <p>• Use of AI is prohibited</p>
+                                <p>• Your code must be open source</p>
+                                <p>• Your project must be runnable on a link</p>
                             </CardContent>
                         </Card>
                     </div>

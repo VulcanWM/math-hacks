@@ -321,3 +321,57 @@ export async function get_past_mathathons() {
 
     return enriched;
 }
+
+export async function submit_submission(
+    userId: string,
+    mathathonId: string,
+    title: string,
+    description: string,
+    thumbnail: string,
+    repoLink: string,
+    runnableLink: string
+) {
+    await dbConnect();
+
+    const user = await get_user_from_id(userId);
+    if (!user) return { success: false, message: "You are not logged in!" };
+
+    const mathathon = await get_mathathon_from_id(mathathonId);
+    if (!mathathon) return { success: false, message: "This mathathon doesn't exist!" };
+
+    const submission = await get_user_mathathon_submission(userId, mathathonId);
+    if (submission) return { success: false, message: "You have already submitted!" };
+
+    const join = await has_user_joined(userId, mathathonId);
+    if (!join) await join_mathathon(userId, mathathonId);
+
+    try {
+        const submission = await Submission.create({
+            mathathon: mathathonId,
+            participant: user._id,
+            title,
+            shortDescription: description,
+            thumbnail,
+            repoLink,
+            runnableLink,
+        });
+
+        return { success: true, message: submission };
+    } catch (err: unknown) {
+        if (err instanceof mongoose.Error.ValidationError) {
+            const message = Object.values(err.errors)
+                .map((e) => e.message)
+                .join(", ");
+            return { success: false, message };
+        }
+
+        // just in case
+        const mongoErr = err as MongoDuplicateError;
+        if (mongoErr.code === 11000 && mongoErr.keyPattern) {
+            const keys = Object.keys(mongoErr.keyPattern);
+            return { success: false, message: `Duplicate entry for: ${keys.join(", ")}` };
+        }
+
+        return { success: false, message: "An unexpected error occurred while submitting." };
+    }
+}

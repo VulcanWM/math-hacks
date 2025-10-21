@@ -101,6 +101,8 @@ export default function MathathonPage(props: {
         "Submissions accepted until 11:59 PM on the day before the end date",
         "Collaboration is allowed but only one person gets the prize",
         "Use of AI is prohibited",
+        "Your code must be open source",
+        "Your project must be runnable on a link"
     ];
 
     function handleJoinClick() {
