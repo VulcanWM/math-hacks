@@ -444,6 +444,6 @@ export async function get_mathathon_submissions(mathathonId: string) {
 export async function get_submission_from_id(submissionId: string) {
     await dbConnect();
 
-    const submission = await Submission.findOne({_id: submissionId}).populate("mathathon");
+    const submission = await Submission.findOne({_id: submissionId}).populate("mathathon").populate("participant")
     return submission == null ? false : submission;
 }
