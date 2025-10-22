@@ -437,7 +437,12 @@ export async function give_xp(userId: string, xp: number) {
 export async function get_mathathon_submissions(mathathonId: string) {
     await dbConnect();
 
-    const submissions = await Submission.find({ mathathon: mathathonId });
+    const submissions = await Submission.find({ mathathon: mathathonId })
+        .populate({
+            path: 'participant',
+            select: 'username name' // pick the fields you want
+        });
+
     return submissions;
 }
 
