@@ -6,8 +6,59 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Shield } from "lucide-react"
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/lib/auth";
+import {redirect} from "next/navigation";
+import {get_mathathon_from_id, get_user_from_email} from "@/lib/database";
+import mongoose from "mongoose";
 
-export default function AdminPage() {
+type MathathonType = {
+    prizes: {
+        prizeName: string
+        prize: string
+    }[]
+    winners: {
+        submission: mongoose.Schema.Types.ObjectId
+        participant: mongoose.Schema.Types.ObjectId
+        prize: string
+    }[]
+} | false
+
+
+export default async function DeclareWinner({ params }: { params: { id: string } }) {
+    const {id} = await params;
+
+    const authUser = await getServerSession(authOptions);
+    const email = authUser?.user?.email || null
+    if (email == null){
+        redirect("/mathathons")
+    }
+
+    const user = await get_user_from_email(email);
+
+    if (user == false) {
+        redirect(`/mathathons`)
+    }
+
+    if (user.role != 'admin'){
+        redirect("/mathathons")
+    }
+
+    const mathathon: MathathonType = await get_mathathon_from_id(id)
+
+    if (mathathon == false){
+        redirect(`/mathathons`)
+    }
+
+    console.log(mathathon.prizes)
+    console.log(mathathon.winners)
+
+    let prizes = mathathon.prizes.map(p => p.prizeName)
+
+    for (const winner of mathathon.winners) {
+        prizes = prizes.filter(prize => prize !== winner.prize)
+    }
+
     return (
         <div className="flex min-h-screen flex-col">
             <SiteHeader />
@@ -20,7 +71,7 @@ export default function AdminPage() {
                         </div>
                         <div>
                             <h1 className="text-4xl font-bold tracking-tight">Admin Panel</h1>
-                            <p className="text-muted-foreground font-mono">&sol;&sol; Manage mathathon prizes</p>
+                            <p className="text-muted-foreground font-mono">&#8725;&#8725; Manage mathathon prizes</p>
                         </div>
                     </div>
 
@@ -32,11 +83,11 @@ export default function AdminPage() {
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
                                 <Label htmlFor="mathathon-id" className="font-mono font-bold">
-                                    Mathathon ID
+                                    Submission ID
                                 </Label>
                                 <Input
-                                    id="mathathon-id"
-                                    placeholder="Enter mathathon ID (e.g., 1, 2, 3)"
+                                    id="submission-id"
+                                    placeholder="Enter submission ID"
                                     className="font-mono border-2"
                                 />
                             </div>
@@ -50,11 +101,9 @@ export default function AdminPage() {
                                         <SelectValue placeholder="Select a prize" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="1st">1st Place - $500 + 1000 XP</SelectItem>
-                                        <SelectItem value="2nd">2nd Place - $300 + 750 XP</SelectItem>
-                                        <SelectItem value="3rd">3rd Place - $200 + 500 XP</SelectItem>
-                                        <SelectItem value="participation">Participation - 100 XP</SelectItem>
-                                        <SelectItem value="custom">Custom Prize</SelectItem>
+                                        {prizes.map((prize, index) => (
+                                            <SelectItem key={index} value={prize}>{prize}</SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -67,31 +116,9 @@ export default function AdminPage() {
 
                             <div className="pt-4 border-t">
                                 <p className="text-sm text-muted-foreground font-mono">
-                                    Note: This action will update the winner&apos;s delta and XP. Make sure the mathathon ID is correct before
+                                    Note: This action will update the winner&apos;s delta and XP. Make sure the submission ID is correct before
                                     submitting.
                                 </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="mt-6 border-2 border-secondary/20 bg-secondary/5">
-                        <CardHeader>
-                            <CardTitle className="text-lg">Quick Stats</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <div className="text-2xl font-bold text-primary font-mono">47</div>
-                                    <div className="text-xs text-muted-foreground">Active Mathathons</div>
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold text-secondary font-mono">234</div>
-                                    <div className="text-xs text-muted-foreground">Pending Reviews</div>
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold text-accent font-mono">$12.4K</div>
-                                    <div className="text-xs text-muted-foreground">Total Awarded</div>
-                                </div>
                             </div>
                         </CardContent>
                     </Card>

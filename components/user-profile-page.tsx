@@ -7,10 +7,40 @@ import { SiteFooter } from "@/components/site-footer"
 import { Trophy, Calendar, Target, Award } from "lucide-react"
 
 export default function UserProfilePage(props: {username: string, userDoc: {
-    username: string, name: string, bio: string, delta: number, xp: number
-}, submissions: {_id: string, title: string, description: string}[]}) {
+    username: string, name: string, bio: string, delta: number, xp: number },
+    submissions: {_id: string, title: string, description: string}[],
+    badges: {submissions: { exponent: number; unlocked: boolean }
+        top3: { exponent: number; unlocked: boolean }
+        winner: { exponent: number; unlocked: boolean }},
+}) {
     const {userDoc} = props
     const {submissions} = props
+    const {badges} = props
+
+    const items = [
+        {
+            icon: "📝",
+            title: "Submissions",
+            description: "Number of Mathathon submissions",
+            base: 4,
+            data: badges.submissions,
+        },
+        {
+            icon: "🥉",
+            title: "Top 3 Finishes",
+            description: "Placed in the top 3 of a Mathathon",
+            base: 3,
+            data: badges.top3,
+        },
+        {
+            icon: "🥇",
+            title: "Wins",
+            description: "First-place finishes in Mathathons",
+            base: 2,
+            data: badges.winner,
+        },
+    ]
+
     const user = {
         username: userDoc.username,
         name: userDoc.name,
@@ -19,15 +49,9 @@ export default function UserProfilePage(props: {username: string, userDoc: {
         delta: userDoc.delta,
         xp: userDoc.xp,
         stats: {
-            submissions: 18,
+            submissions: submissions.length,
             topRank: 1,
         },
-        achievements: [
-            { title: "1st Place Winner", description: "Spring Algebra Sprint", icon: "🥇" },
-            { title: "Perfect Score", description: "Number Theory Quest", icon: "💯" },
-            { title: "Top 10 Finisher", description: "5 times", icon: "⭐" },
-            { title: "Early Adopter", description: "Joined in 2024", icon: "🚀" },
-        ],
         submissions: [
             {
                 id: 1,
@@ -111,8 +135,8 @@ export default function UserProfilePage(props: {username: string, userDoc: {
                     </div>
                 </section>
 
-                {/*<div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">*/}
-                {/*    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">*/}
+                <div className="container mx-auto max-w-7xl px-6 lg:px-12 py-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/*        /!* Main Content *!/*/}
                 {/*        <div className="lg:col-span-2 space-y-4">*/}
                 {/*            {submissions.map((submission) => (*/}
@@ -152,48 +176,50 @@ export default function UserProfilePage(props: {username: string, userDoc: {
                 {/*            ))}*/}
                 {/*        </div>*/}
 
-                {/*        /!* Sidebar *!/*/}
-                {/*        <div className="space-y-6">*/}
-                {/*            /!* Achievements *!/*/}
-                {/*            <Card>*/}
-                {/*                <CardHeader>*/}
-                {/*                    <CardTitle className="text-lg flex items-center gap-2">*/}
-                {/*                        <Award className="w-5 h-5" />*/}
-                {/*                        Achievements*/}
-                {/*                    </CardTitle>*/}
-                {/*                </CardHeader>*/}
-                {/*                <CardContent className="space-y-3">*/}
-                {/*                    {user.achievements.map((achievement, i) => (*/}
-                {/*                        <div key={i} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">*/}
-                {/*                            <div className="text-2xl">{achievement.icon}</div>*/}
-                {/*                            <div className="flex-1">*/}
-                {/*                                <p className="font-semibold text-sm">{achievement.title}</p>*/}
-                {/*                                <p className="text-xs text-muted-foreground">{achievement.description}</p>*/}
-                {/*                            </div>*/}
-                {/*                        </div>*/}
-                {/*                    ))}*/}
-                {/*                </CardContent>*/}
-                {/*            </Card>*/}
+                        {/* Sidebar */}
+                        <div className="space-y-6">
+                            {/* Achievements */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <Award className="w-5 h-5" />
+                                        Achievements
+                                    </CardTitle>
+                                </CardHeader>
 
-                {/*            /!* Activity Summary *!/*/}
-                {/*            <Card className="bg-primary/5 border-primary/20">*/}
-                {/*                <CardHeader>*/}
-                {/*                    <CardTitle className="text-lg">Activity Summary</CardTitle>*/}
-                {/*                </CardHeader>*/}
-                {/*                <CardContent className="space-y-3 text-sm">*/}
-                {/*                    <div className="flex items-center justify-between">*/}
-                {/*                        <span className="text-muted-foreground">Total Submissions</span>*/}
-                {/*                        <span className="font-semibold">{user.stats.submissions}</span>*/}
-                {/*                    </div>*/}
-                {/*                    <div className="flex items-center justify-between">*/}
-                {/*                        <span className="text-muted-foreground">Best Rank</span>*/}
-                {/*                        <span className="font-semibold">#{user.stats.topRank}</span>*/}
-                {/*                    </div>*/}
-                {/*                </CardContent>*/}
-                {/*            </Card>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                                <CardContent className="space-y-3">
+                                    {items.map((item, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg"
+                                        >
+                                            <div className="text-2xl">{item.icon}</div>
+                                            <div className="flex-1">
+                                                <p className="font-semibold text-sm flex items-center gap-2">
+                                                    {item.title}
+                                                    <Badge
+                                                        className={`text-xs px-2 py-1 ${
+                                                            item.data.unlocked
+                                                                ? "bg-green-500 text-white"
+                                                                : "bg-gray-200 text-gray-400"
+                                                        }`}
+                                                    >
+                                                        {item.data.unlocked
+                                                            ? `${item.base}^${item.data.exponent}`
+                                                            : `${item.base}^0`}
+                                                    </Badge>
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </div>
+                </div>
             </main>
 
             <SiteFooter />

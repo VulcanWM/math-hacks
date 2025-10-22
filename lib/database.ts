@@ -447,3 +447,62 @@ export async function get_submission_from_id(submissionId: string) {
     const submission = await Submission.findOne({_id: submissionId}).populate("mathathon").populate("participant")
     return submission == null ? false : submission;
 }
+
+export async function get_participant_stats(participantId: string) {
+    await dbConnect();
+
+    const [wins] = await Mathathon.aggregate([
+        { $unwind: "$winners" },
+        { $match: { "winners.participant": participantId} },
+        {
+            $group: {
+                _id: "$winners.participant",
+                firstPrizeCount: {
+                    $sum: { $cond: [{ $eq: ["$winners.prize", "1st prize"] }, 1, 0] },
+                },
+                top3Count: {
+                    $sum: {
+                        $cond: [
+                            { $in: ["$winners.prize", ["1st prize", "2nd prize", "3rd prize"]] },
+                            1,
+                            0,
+                        ],
+                    },
+                },
+            },
+        },
+    ]);
+
+    const submissionCount = await Submission.countDocuments({
+        participant: participantId,
+    });
+
+    return {
+        firstPrizeCount: wins?.firstPrizeCount || 0,
+        top3Count: wins?.top3Count || 0,
+        submissionCount,
+    };
+}
+
+export function calculate_badges(stats: {submissionCount: number
+    top3Count: number
+    firstPrizeCount: number}) {
+    const getLevel = (count: number, base: number) => {
+        let level = 0
+        let threshold = 1
+        while (count >= threshold) {
+            level++
+            threshold = Math.pow(base, level)
+        }
+        const nextThreshold = Math.pow(base, level)
+        const remaining = nextThreshold - count
+        const unlocked = count >= 1
+        return { exponent: Math.max(level - 1, 0), nextThreshold, remaining, unlocked }
+    }
+
+    return {
+        submissions: getLevel(stats.submissionCount, 4),
+        top3: getLevel(stats.top3Count, 3),
+        winner: getLevel(stats.firstPrizeCount, 2),
+    }
+}
