@@ -507,7 +507,7 @@ export function calculate_badges(stats: {submissionCount: number
     }
 }
 
-export async function add_winner(
+export async function declare_winner(
     mathathonId: string,
     submissionId: string,
     prize: string,

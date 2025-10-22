@@ -1,6 +1,6 @@
 'use server'
 
-import {get_user_from_email, create_user, create_mathathon, join_mathathon, submit_submission} from "@/lib/database"
+import {get_user_from_email, create_user, create_mathathon, join_mathathon, submit_submission, declare_winner} from "@/lib/database"
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache'
@@ -106,6 +106,31 @@ export async function handleSubmitSubmission({ mathathonId, title, description, 
     }
 
     const result = await submit_submission(user._id, mathathonId, title, description, thumbnail, repoLink, runnableLink)
+
+    revalidatePath('/')
+
+    return result
+}
+
+export async function handleDeclareWinner({ mathathonId, submissionId, prize }: { mathathonId: string, submissionId: string, prize: string }) {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email || null
+
+    if (!email) {
+        return { success: false, message: 'You are not logged in.' }
+    }
+
+    const user = await get_user_from_email(email)
+
+    if (user == false) {
+        return { success: false, message: 'You are not logged in.' }
+    }
+
+    if (user.role != 'admin'){
+        return { success: false, message: 'You are not an admin.' }
+    }
+
+    const result = await declare_winner(mathathonId, submissionId, prize, user._id)
 
     revalidatePath('/')
 
