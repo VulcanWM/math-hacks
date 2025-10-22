@@ -506,3 +506,72 @@ export function calculate_badges(stats: {submissionCount: number
         winner: getLevel(stats.firstPrizeCount, 2),
     }
 }
+
+export async function add_winner(
+    mathathonId: string,
+    submissionId: string,
+    prize: string,
+    userId: string) {
+    await dbConnect()
+
+    const admin_user = await get_user_from_id(userId)
+    if (!admin_user) {
+        return { success: false, message: "You are not logged in." }
+    }
+
+    if (admin_user.role != "admin"){
+        return { success: false, message: "You are not an admin." }
+    }
+
+    const mathathon = await get_mathathon_from_id(mathathonId)
+    if (!mathathon) {
+        return { success: false, message: "Mathathon not found" }
+    }
+
+    const submission = await get_submission_from_id(submissionId)
+    if (!submission) {
+        return { success: false, message: "Submission not found" }
+    }
+
+    const participantId = submission.participant._id
+
+    // Prevent duplicate
+    const alreadyWinner = mathathon.winners.some(
+        (w: { participant: string, prize: string }) =>
+            String(w.participant) === String(participantId) &&
+            w.prize === prize
+    )
+    if (alreadyWinner) {
+        return { success: false, message: "Participant already recorded as winner for this prize" }
+    }
+
+    const multipliers: Record<string, number> = {
+        "1st Prize": 5,
+        "2nd Prize": 3,
+        "3rd Prize": 2,
+    }
+
+    const baseDelta = mathathon.deltaValue || 1
+    const multiplier = multipliers[prize] || 1
+    const extraDelta = baseDelta * (multiplier - 1)
+
+    mathathon.winners.push({
+        participant: participantId,
+        submission: submission._id,
+        prize,
+    })
+
+    await mathathon.save()
+
+    const user = await get_user_from_id(participantId)
+
+    user.delta += extraDelta
+    user.xp += extraDelta
+
+    await user.save()
+
+    return {
+        success: true,
+        message: "Winner added successfully",
+    }
+}

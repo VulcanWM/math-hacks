@@ -50,9 +50,6 @@ export default async function DeclareWinner({ params }: { params: { id: string }
         redirect(`/mathathons`)
     }
 
-    console.log(mathathon.prizes)
-    console.log(mathathon.winners)
-
     let prizes = mathathon.prizes.map(p => p.prizeName)
 
     for (const winner of mathathon.winners) {
