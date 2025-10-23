@@ -246,7 +246,7 @@ export default async function SubmissionDetailPage({ params }: { params: { id: s
                         <div className="container mx-auto max-w-7xl px-6 lg:px-12">
                             <Certificate
                                 participantName={submission.participant.name}
-                                hackathonTitle={submission.mathathon.title}
+                                mathathonTitle={submission.mathathon.title}
                                 prize={prize} // will be undefined if no prize
                                 date={now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                             />

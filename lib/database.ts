@@ -246,7 +246,7 @@ export async function get_landing_mathathons() {
 export async function get_user_submissions(userId: string){
     await dbConnect();
 
-    const submissions = await Submission.find({participant: userId});
+    const submissions = await Submission.find({participant: userId}).populate("mathathon");
     return submissions;
 }
 
@@ -591,4 +591,30 @@ export async function get_prize_for_submission(mathathonId: string, submissionId
     );
 
     return winner ? winner.prize : null;
+}
+
+export async function get_highest_rank_for_user(userId: string): Promise<string> {
+    await dbConnect();
+
+    // Get all mathathons that have winners
+    const mathathons = await Mathathon.find({ 'winners.participant': userId }).lean();
+
+    if (!mathathons || mathathons.length === 0) return "-";
+
+    let bestRank = Infinity;
+
+    mathathons.forEach((mathathon) => {
+        mathathon.winners.forEach((winner: { participant: string; prize: string }) => {
+            if (String(winner.participant) === String(userId)) {
+                let rank = -1;
+                if (winner.prize?.toLowerCase().includes('1st')) rank = 1;
+                else if (winner.prize?.toLowerCase().includes('2nd')) rank = 2;
+                else if (winner.prize?.toLowerCase().includes('3rd')) rank = 3;
+
+                if (rank !== -1 && rank < bestRank) bestRank = rank;
+            }
+        });
+    });
+
+    return bestRank === Infinity ? "-" : ("#" + String(bestRank));
 }

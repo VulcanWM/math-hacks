@@ -6,19 +6,19 @@ import { Button } from "@/components/ui/button";
 
 type CertificateProps = {
     participantName: string;
-    hackathonTitle: string;
+    mathathonTitle: string;
     prize?: string;
     date?: string;
 };
 
-export default function Certificate({ participantName, hackathonTitle, prize, date }: CertificateProps) {
+export default function Certificate({ participantName, mathathonTitle, prize, date }: CertificateProps) {
     const ref = useRef<HTMLDivElement>(null);
 
     const handleDownload = async () => {
         if (ref.current) {
             const dataUrl = await toPng(ref.current);
             const link = document.createElement("a");
-            link.download = `${participantName}_certificate.png`;
+            link.download = `${mathathonTitle}_certificate.png`;
             link.href = dataUrl;
             link.click();
         }
@@ -54,7 +54,7 @@ export default function Certificate({ participantName, hackathonTitle, prize, da
                     </p>
                 )}
 
-                <h3 className="text-3xl font-medium mb-6">{hackathonTitle}</h3>
+                <h3 className="text-3xl font-medium mb-6">{mathathonTitle}</h3>
 
                 {date && (
                     <p className="text-sm text-muted-foreground font-mono absolute bottom-6">
