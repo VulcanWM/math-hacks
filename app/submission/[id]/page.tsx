@@ -6,59 +6,62 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ThumbsUp, Eye, Calendar, Trophy, FileText, ExternalLink } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import {get_submission_from_id, get_user_from_email} from "@/lib/database";
+import {get_submission_from_id, get_user_from_email, get_prize_for_submission} from "@/lib/database";
 import {redirect} from 'next/navigation'
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
+import Certificate from "@/components/certificate";
 
 
 export default async function SubmissionDetailPage({ params }: { params: { id: string } }) {
-    const {id} = await params;
+    const { id } = params;
 
     const submission: {
-        title: string,
-        shortDescription: string,
-        participant: {
-            _id: string,
-            name: string,
-            username: string,
-            role: string,
-        },
-        mathathon: {
             title: string,
-            _id: string,
-            declareWinnerDate: Date,
-            startDate: Date,
-            theme: string,
-        },
-        repoLink: string,
-        runnableLink: string,
+            shortDescription: string,
+            participant: {
+                _id: string,
+                name: string,
+                username: string,
+                role: string,
+            },
+            mathathon: {
+                title: string,
+                _id: string,
+                declareWinnerDate: Date,
+                startDate: Date,
+                theme: string,
+            },
+            repoLink: string,
+            runnableLink: string,
+            _id: string
     } = await get_submission_from_id(id)
-    console.log(submission);
 
-    if (!submission) {
-        redirect("/mathathons")
+    const now = new Date();
+
+    const authUser = await getServerSession(authOptions);
+    const email = authUser?.user?.email || null;
+    let user = null;
+    if (email) {
+        const fetchedUser = await get_user_from_email(email);
+        if (fetchedUser) user = fetchedUser;
     }
 
-    const now = new Date()
+    let cert = false;
+    if (user && String(user._id) === String(submission.participant._id)) {
+        cert = true;
+    }
 
-    if (now < submission.mathathon.declareWinnerDate){
-        const authUser = await getServerSession(authOptions);
-        const email = authUser?.user?.email || null
-        if (email == null){
-            redirect("/mathathons")
+    if (now < submission.mathathon.declareWinnerDate) {
+        if (!user || (user.role !== "admin" && String(user._id) !== String(submission.participant._id))) {
+            redirect("/mathathons");
         }
+        cert = false;
+    }
 
-        const user = await get_user_from_email(email);
-
-        if (user == false){
-            redirect(`/mathathons`)
-        }
-
-        if (user.role == 'admin' || submission.participant._id == user._id){
-        } else {
-            redirect("/mathathons")
-        }
+    let prize: string | undefined = undefined;
+    if (now > submission.mathathon.declareWinnerDate) {
+        prize = await get_prize_for_submission(submission.mathathon._id, submission._id);
     }
 
     return (
@@ -239,6 +242,16 @@ export default async function SubmissionDetailPage({ params }: { params: { id: s
                             </div>
                         </div>
                     </div>
+                    {cert &&
+                        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+                            <Certificate
+                                participantName={submission.participant.name}
+                                hackathonTitle={submission.mathathon.title}
+                                prize={prize} // will be undefined if no prize
+                                date={now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                            />
+                        </div>
+                    }
                 </section>
             </main>
 

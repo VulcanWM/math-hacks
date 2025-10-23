@@ -580,3 +580,15 @@ export async function declare_winner(
         message: "Winner added successfully",
     }
 }
+
+export async function get_prize_for_submission(mathathonId: string, submissionId: string) {
+    await dbConnect();
+    const mathathon = await Mathathon.findById(mathathonId);
+    if (!mathathon) return null;
+
+    const winner = mathathon.winners.find(
+        (w: { submission: string; participant: string; prize: string }) => String(w.submission) === String(submissionId)
+    );
+
+    return winner ? winner.prize : null;
+}
