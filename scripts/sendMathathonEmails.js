@@ -1,8 +1,23 @@
 import mongoose from "mongoose";
-import Mathathon from "../models/Mathathon.js";
-import User from "../models/User.js";
-import Join from "../models/Join.js";
-import { sendEmail } from "../utils/sendEmail.js";
+
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const MathathonModule = await import(`file://${path.join(__dirname, "../models/Mathathon.js")}`);
+const Mathathon = MathathonModule.default;
+
+const UserModule = await import(`file://${path.join(__dirname, "../models/User.js")}`);
+const User = UserModule.default;
+
+const JoinModule = await import(`file://${path.join(__dirname, "../models/Join.js")}`);
+const Join = JoinModule.default;
+
+const EmailModule = await import(`file://${path.join(__dirname, "../utils/sendEmail.js")}`);
+const { sendEmail } = EmailModule;
+
 
 function normaliseUTC(date) {
     const d = new Date(date);
