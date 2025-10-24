@@ -1,22 +1,96 @@
 import mongoose from "mongoose";
+import nodemailer from "nodemailer";
 
-import path from "path";
-import { fileURLToPath } from "url";
+const Mathathon = new mongoose.Schema({
+    _id: { type: String },
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    startDate: {type: Date, required: true},
+    endDate: {type: Date, required: true},
+    declareWinnerDate: {type: Date, required: true},
+    deltaValue: {type: Number, required: true},
+    title: {type: String, required: true},
+    winners: [
+        {
+            submission: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' },
+            participant: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            prize: String
+        }
+    ],
+    mathathonType: {type: String, required: true},
+    coverImage: { type: String }, // URL to image
+    theme: {type: String, required: true},
+    sponsors: [
+        {
+            name: String,
+            url: String,
+        }
+    ],
+    prizes: [
+        {
+            prizeName: String, // 1st place
+            prize: String // badge + money
+        }
+    ]
+}, { timestamps: true })
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const User = new mongoose.Schema(
+    {
+        email: { type: String, required: true, lowercase: true },
+        username: { type: String, required: true, maxlength: 30 },
+        role: { type: String, enum: ["user", "admin"], default: "user" },
+        bio: { type: String, default: "", maxlength: 200 },
+        name: { type: String, required: true, maxlength: 50 },
+        links: {
+            type: Map,
+            of: String,
+            default: {},
+        },
+        badges: { type: [String], default: [] },
+        delta: { type: Number, default: 0 },
+        xp: { type: Number, default: 0 },
+    },
+    {
+        timestamps: true,
+        collation: { locale: "en", strength: 2 },
+    }
+);
 
-const MathathonModule = await import(`file://${path.join(__dirname, "../models/Mathathon.js")}`);
-const Mathathon = MathathonModule.default;
+User.index(
+    { username: 1 },
+    { unique: true, collation: { locale: "en", strength: 2 } }
+);
 
-const UserModule = await import(`file://${path.join(__dirname, "../models/User.js")}`);
-const User = UserModule.default;
+User.index(
+    { email: 1 },
+    { unique: true, collation: { locale: "en", strength: 2 } }
+);
 
-const JoinModule = await import(`file://${path.join(__dirname, "../models/Join.js")}`);
-const Join = JoinModule.default;
+const Join = new mongoose.Schema({
+    mathathon: { type: String, ref: 'Mathathon', required: true },
+    participant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true })
 
-const EmailModule = await import(`file://${path.join(__dirname, "../utils/sendEmail.js")}`);
-const { sendEmail } = EmailModule;
+export async function sendEmail(to, subject, text) {
+    if (!to) return;
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    await transporter.sendMail({
+        from: `"MathHacks" <${process.env.EMAIL_USER}>`,
+        to,
+        subject,
+        text,
+    });
+
+    console.log(`📨 Sent to ${to}: ${subject}`);
+}
+
 
 
 function normaliseUTC(date) {
