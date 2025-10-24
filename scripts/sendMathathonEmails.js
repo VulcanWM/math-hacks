@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 
-const Mathathon = new mongoose.Schema({
+const MathathonSchema = new mongoose.Schema({
     _id: { type: String },
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     startDate: {type: Date, required: true},
@@ -32,8 +32,9 @@ const Mathathon = new mongoose.Schema({
         }
     ]
 }, { timestamps: true })
+const Mathathon = mongoose.model('Mathathon', MathathonSchema);
 
-const User = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
     {
         email: { type: String, required: true, lowercase: true },
         username: { type: String, required: true, maxlength: 30 },
@@ -55,20 +56,24 @@ const User = new mongoose.Schema(
     }
 );
 
-User.index(
+UserSchema.index(
     { username: 1 },
     { unique: true, collation: { locale: "en", strength: 2 } }
 );
 
-User.index(
+UserSchema.index(
     { email: 1 },
     { unique: true, collation: { locale: "en", strength: 2 } }
 );
 
-const Join = new mongoose.Schema({
+const User = mongoose.model('User', UserSchema);
+
+const JoinSchema = new mongoose.Schema({
     mathathon: { type: String, ref: 'Mathathon', required: true },
     participant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true })
+
+const Join = mongoose.model('Join', JoinSchema);
 
 export async function sendEmail(to, subject, text) {
     if (!to) return;
