@@ -28,6 +28,10 @@ export async function create_user(
 ) {
     await dbConnect();
 
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)){
+        return "Username can only contain letters, numbers, underscores, and hyphens";
+    }
+
     try {
         await User.create({
             email,
