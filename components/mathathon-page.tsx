@@ -155,7 +155,7 @@ export default function MathathonPage(props: {
                                         {status == "B" ? <>
                                             {props.userSubmission == false ? (
                                                 <Button size="lg" asChild>
-                                                    <Link href="/submit">Submit Solution</Link>
+                                                    <Link href={`/submit/${String(mathathonDoc._id)}`}>Submit Solution</Link>
                                                 </Button>
                                             ) : (
                                                 <Button size="lg" asChild>
@@ -300,14 +300,14 @@ export default function MathathonPage(props: {
                                 </CardHeader>
                                 <CardContent className="space-y-3">
                                     <Button className="w-full" asChild>
-                                        <Link href="/submit">Submit Solution</Link>
+                                        <Link href={`/submit/${String(mathathonDoc._id)}`}>Submit Solution</Link>
                                     </Button>
                                     <Button variant="outline" className="w-full bg-transparent" asChild>
                                         <Link href={`/browse-mathathon/${mathathonDoc._id}`}>Browse Submissions</Link>
                                     </Button>
-                                    <Button variant="ghost" className="w-full">
-                                        Share Mathathon
-                                    </Button>
+                                    {/*<Button variant="ghost" className="w-full">*/}
+                                    {/*    Share Mathathon*/}
+                                    {/*</Button>*/}
                                 </CardContent>
                             </Card>
                         </div>
